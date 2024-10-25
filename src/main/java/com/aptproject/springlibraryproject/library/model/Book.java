@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @SequenceGenerator(name = "default_generator", sequenceName = "book_sequence", allocationSize = 1)
-public class Book  extends GenericModel{
+public class Book  extends GenericModel {
 
     @Column(name = "title", nullable = false)
     private String bookTitle;
