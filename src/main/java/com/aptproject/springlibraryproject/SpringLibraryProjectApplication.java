@@ -20,14 +20,12 @@ public class SpringLibraryProjectApplication implements CommandLineRunner {
         SpringApplication.run(SpringLibraryProjectApplication.class, args);
     }
 
-//    @Autowired
-//    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
     public void run(String... args) throws Exception {
         bookDAOBean.findBookById(4);
-
-
     }
 }
 
