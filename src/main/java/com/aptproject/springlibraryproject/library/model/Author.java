@@ -30,7 +30,7 @@ import java.util.List;
 
         @ManyToMany
         @JoinTable(name = "books_authors",
-                joinColumns = @JoinColumn(name = "book_id"), foreignKey = @ForeignKey(name = "FK_AUTHORS_BOOKS"),
+                joinColumns = @JoinColumn(name = "author_id"), foreignKey = @ForeignKey(name = "FK_AUTHORS_BOOKS"),
                 inverseJoinColumns = @JoinColumn(name = "book_id"), inverseForeignKey = @ForeignKey(name = "FK_BOOKS_AUTHORS"))
         List<Book> books;
 }
