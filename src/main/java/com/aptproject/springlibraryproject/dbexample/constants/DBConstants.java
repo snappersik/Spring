@@ -5,5 +5,5 @@ public interface DBConstants {
     String DB = "local_db";
     String USER = "postgres";
     String PASSWORD = "12345";
-    String PORT = "5432";
+    String PORT = "5332";
 }

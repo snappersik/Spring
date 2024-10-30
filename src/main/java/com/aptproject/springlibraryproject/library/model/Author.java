@@ -1,5 +1,6 @@
 package com.aptproject.springlibraryproject.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,7 @@ import java.util.List;
         @Column(name = "description")
         private String description;
 
+        @JsonIgnore
         @ManyToMany
         @JoinTable(name = "books_authors",
                 joinColumns = @JoinColumn(name = "author_id"), foreignKey = @ForeignKey(name = "FK_AUTHORS_BOOKS"),

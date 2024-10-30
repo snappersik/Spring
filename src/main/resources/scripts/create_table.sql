@@ -15,4 +15,4 @@ values('Потерянный рай', 'Д. Мильтон', now() - interval '24
 insert into public.books (title, author, date_added)
 values ('Братья Карамазовы', 'Ф.М. Достоевский', now() - interval '24h');
 
-select * from public.books;
+select * from public.books_authors;
