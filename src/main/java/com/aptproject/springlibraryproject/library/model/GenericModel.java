@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,13 +21,13 @@ public abstract class GenericModel {
     private Long id;
 
     @Column(name = "created_when")
-    private LocalDate createWhen;
+    private LocalDateTime createWhen;
 
     @Column(name = "created_by")
     private String createdBy;
 
     @Column(name = "deleted_when")
-    private LocalDate deletedWhen;
+    private LocalDateTime deletedWhen;
 
     @Column(name = "deleted_by")
     private String deletedBy;

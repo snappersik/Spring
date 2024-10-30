@@ -1,67 +1,64 @@
 package com.aptproject.springlibraryproject.library.controller;
 
+import com.aptproject.springlibraryproject.library.dto.GenericDTO;
 import com.aptproject.springlibraryproject.library.model.GenericModel;
-import com.aptproject.springlibraryproject.library.repository.GenericRepository;
+import com.aptproject.springlibraryproject.library.service.GenericService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.webjars.NotFoundException;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @Slf4j
 
-public abstract class GenericController <T extends GenericModel> { // Ограничиваем работу только с моделями
-    // которые наследуются от GenericModel
+public abstract class GenericController <E extends GenericModel, D extends GenericDTO> {
+    private final GenericService<E, D> service;
 
-    private final GenericRepository<T> genericRepository;
-
-    protected GenericController(GenericRepository<T> genericRepository) {
-        this.genericRepository = genericRepository;
+    protected GenericController(GenericService<E, D> genericService) {
+        this.service = genericService;
     }
 
     @Operation(description = "Получить запись по Id", method = "getOneById")
-    @RequestMapping(value = "/getOneById", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<T> getOneById(@RequestParam(value = "id") Long id) {
+    @RequestMapping(value = "/getOneById",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<D> getOneById(@RequestParam(value = "id") Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(genericRepository.findById(id).orElseThrow(() -> new NotFoundException("Данные по заданному ID не найдены")));
+                .body(service.getOne(id));
     }
 
     @Operation(description = "Получить все записи", method = "getAll")
-    @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE) // сразу указали тип маппинга "get"
-
-    public ResponseEntity<List<T>> getAll() {
+    @RequestMapping(value = "/getAll",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<D>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(genericRepository.findAll());
+                .body(service.listAll());
     }
 
-    @Operation(description = "Создать запись", method = "create")
-    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE,
+    @Operation(description = "Создать запись", method = "add")
+    @RequestMapping(value = "/add",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<T> create(@RequestBody T newEntity) {
-        newEntity.setCreateWhen(LocalDate.now());
-        log.info(newEntity.toString()); // стал доступен благодаря @Slf4j
-        genericRepository.save(newEntity);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(newEntity);
+    public ResponseEntity<D> create(@RequestBody D newEntity) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(newEntity));
     }
 
     @Operation(description = "Обновить запись", method = "update")
-    @RequestMapping(value = "/update", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/update",
+            method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
 
-    public ResponseEntity<T> update(@RequestBody T updateEntity, @RequestParam(value = "id") Long id) {
+    public ResponseEntity<D> update(@RequestBody D updateEntity,
+                                    @RequestParam(value = "id") Long id) {
         updateEntity.setId(id);
-        genericRepository.save(updateEntity);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(updateEntity);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(updateEntity));
     }
 
     // localhost:8080/authors/delete?id=1 - @RequestParam
@@ -69,6 +66,6 @@ public abstract class GenericController <T extends GenericModel> { // Огран
     @Operation(description = "Удалить запись", method = "delete")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable(value = "id") Long id) {
-        genericRepository.deleteById(id);
+        service.delete(id);
     }
 }
