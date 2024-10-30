@@ -5,6 +5,7 @@ import com.aptproject.springlibraryproject.library.dto.GenericDTO;
 import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.GenericModel;
 import jakarta.annotation.PostConstruct;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -47,13 +48,29 @@ public abstract class GenericMapper <E extends GenericModel, D extends GenericDT
      @Override
      public List<D> toDTOs(List<E> entities) {return entities.stream().map(this::toDTO).toList();}
 
+     // Конвертеры для mepSpecificFields
+     protected Converter<D, E> toEntityConverter() {
+          return context -> {
+               D source = context.getSource();
+               E destination = context.getDestination();
+               mapSpecificFields(source, destination);
+               return context.getDestination();
+          };
+     }
+               protected Converter<E, D> toDTOConverter() {
+                    return context -> {
+                         E source = context.getSource();
+                         D destination = context.getDestination();
+                         mapSpecificFields(source, destination);
+                         return context.getDestination();
+                    };
+               }
+
+     protected abstract void mapSpecificFields(D source, E destination);
+     protected abstract void mapSpecificFields(E source, D destination);
+
      @PostConstruct
      protected abstract void setupMapper();
-
-     protected abstract void mapSpecificFields(AuthorDTO source, Author destination);
-
-     protected abstract void mapSpecificFields(Author source, AuthorDTO destination);
-
      protected abstract List<Long> getIds(E entity);
 
 }
