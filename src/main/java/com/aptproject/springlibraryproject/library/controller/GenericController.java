@@ -14,8 +14,8 @@ import java.util.List;
 @RestController
 @Slf4j
 
-public abstract class GenericController <E extends GenericModel, D extends GenericDTO> {
-    private final GenericService<E, D> service;
+public abstract class GenericController<E extends GenericModel, D extends GenericDTO> {
+    protected GenericService<E, D> service;
 
     protected GenericController(GenericService<E, D> genericService) {
         this.service = genericService;
