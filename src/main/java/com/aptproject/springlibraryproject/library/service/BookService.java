@@ -15,7 +15,7 @@ public class BookService
 
     private final AuthorRepository authorRepository;
 
-    protected BookService(BookRepository repository,
+    public BookService(BookRepository repository,
                           BookMapper mapper,
                           AuthorRepository authorRepository) {
         super(repository, mapper);
