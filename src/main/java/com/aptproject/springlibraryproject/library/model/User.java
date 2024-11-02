@@ -44,11 +44,11 @@ public class User extends GenericModel{
     @Column(name = "address", nullable = false)
     private String address;
 
-    @ManyToOne
+    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "role_id", nullable = false,
         foreignKey = @ForeignKey(name = "USERS_ROLES"))
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<BookRentInfo> bookRentInfos;
 }
