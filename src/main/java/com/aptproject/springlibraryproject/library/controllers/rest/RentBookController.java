@@ -1,4 +1,4 @@
-package com.aptproject.springlibraryproject.library.controller;
+package com.aptproject.springlibraryproject.library.controllers.rest;
 
 
 import com.aptproject.springlibraryproject.library.dto.BookRentInfoDTO;

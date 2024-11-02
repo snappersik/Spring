@@ -1,0 +1,20 @@
+footer {
+position: fixed;
+bottom: 0;
+width: 100%;
+}
+
+.container {
+margin-bottom: 50px;
+}
+
+.btn-primary {
+color: black;
+background-color; #b84f3c; border-color: #b84f3c;
+}
+
+.btn-primary: hover {
+color: white;
+background-color: #b84f3c;
+border-color: #b84f3c;
+}

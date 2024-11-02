@@ -1,17 +1,12 @@
-package com.aptproject.springlibraryproject.library.controller;
+package com.aptproject.springlibraryproject.library.controllers.rest;
 
 import com.aptproject.springlibraryproject.library.dto.BookDTO;
-import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.Book;
-import com.aptproject.springlibraryproject.library.repository.*;
 import com.aptproject.springlibraryproject.library.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.aptproject.springlibraryproject.library.repository.AuthorRepository;
-import com.aptproject.springlibraryproject.library.repository.GenericRepository;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.webjars.NotFoundException;
 
 @RestController
 @RequestMapping("/books")
