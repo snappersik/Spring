@@ -1,11 +1,23 @@
 package com.aptproject.springlibraryproject.library.model;
 
 public enum Genre {
-    FANTASY,
+    FANTASY ("Фантастика"),
 
-    SCIENCE_FICTION,
+    SCIENCE_FICTION ("Научная фантастика"),
 
-    DRAMA,
+    DRAMA ("Драма"),
 
-    NOVEL
+    NOVEL("Роман"),
+
+    ADVENTURE ("Приключения");
+
+    private final String genreTextDisplay;
+
+    Genre(String genreTextDisplay) {
+        this.genreTextDisplay = genreTextDisplay;
+    }
+    public String getGenreTextDisplay() {
+        return genreTextDisplay;
+    }
 }
+
