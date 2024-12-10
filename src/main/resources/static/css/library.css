@@ -10,11 +10,12 @@ margin-bottom: 50px;
 
 .btn-primary {
 color: black;
-background-color; #b84f3c; border-color: #b84f3c;
+background-color; #b84f3c;
+border-color: #b84f3c;
 }
 
-.btn-primary: hover {
+.btn-primary:hover {
 color: white;
-background-color: #b84f3c;
-border-color: #b84f3c;
+background-color: #fdbdba;
+border-color: #fc8e88;
 }
