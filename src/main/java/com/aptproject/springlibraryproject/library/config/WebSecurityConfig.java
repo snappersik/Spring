@@ -2,6 +2,7 @@ package com.aptproject.springlibraryproject.library.config;
 
 import com.aptproject.springlibraryproject.library.service.userdetails.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,6 +42,13 @@ public class WebSecurityConfig {
             "/books/update",
             "/books/delete"
     );
+    private final List<String> USER_WHITE_LIST = List.of(
+            "/login",
+            "/users",
+            "users/remember-password"
+    );
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .cors().disable() //TODO ТЕСТ БЕЗ CORS/CSRF
