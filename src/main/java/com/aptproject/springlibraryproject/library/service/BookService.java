@@ -6,29 +6,38 @@ import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.Book;
 import com.aptproject.springlibraryproject.library.repository.AuthorRepository;
 import com.aptproject.springlibraryproject.library.repository.BookRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.util.List;
+
 @Service
-public class BookService
-        extends GenericService<Book, BookDTO>{
+public class BookService extends GenericService<Book, BookDTO> {
 
     private final AuthorRepository authorRepository;
 
-    public BookService(BookRepository repository,
-                          BookMapper mapper,
+    protected BookService(BookRepository bookRepository,
+                          BookMapper bookMapper,
                           AuthorRepository authorRepository) {
-        super(repository, mapper);
+        super(bookRepository, bookMapper);
         this.authorRepository = authorRepository;
     }
 
-    public BookDTO addAuthor(final Long bookId,
-                             final Long authorId) {
+    public Page<BookDTO> getAllBooks(Pageable pageable) {
+        Page<Book> booksPaginated = repository.findAll(pageable);
+        List<BookDTO> result = mapper.toDTOs(booksPaginated.getContent());
+        return new PageImpl<>(result, pageable, booksPaginated.getTotalElements());
+    }
+
+    public BookDTO addAuthor(final Long bookId, final Long authorId) {
         BookDTO book = getOne(bookId);
-        Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException("автор не найден"));
+        Author author = authorRepository.findById(authorId).
+                orElseThrow(() -> new NotFoundException("Автор не найден."));
         book.getAuthorIds().add(author.getId());
         update(book);
         return book;
     }
-
 }

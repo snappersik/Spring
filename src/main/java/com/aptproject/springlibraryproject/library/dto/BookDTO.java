@@ -1,6 +1,9 @@
 package com.aptproject.springlibraryproject.library.dto;
 
+import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.Genre;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,17 +13,19 @@ import java.time.LocalDate;
 import java.util.List;
 
 @ToString
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-public class BookDTO extends GenericDTO{
+public class BookDTO extends GenericDTO {
+
     private String bookTitle;
+    private String publisher;
     private LocalDate publishDate;
-    private String publish;
     private Integer amount;
     private String storagePlace;
     private String onlineCopyPath;
-    private String description;
     private Genre genre;
+    private String description;
     private List<Long> authorIds;
+    private List<AuthorDTO> authorInfo;
 }

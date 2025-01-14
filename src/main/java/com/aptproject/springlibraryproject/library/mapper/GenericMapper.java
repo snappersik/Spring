@@ -1,8 +1,6 @@
 package com.aptproject.springlibraryproject.library.mapper;
 
-import com.aptproject.springlibraryproject.library.dto.AuthorDTO;
 import com.aptproject.springlibraryproject.library.dto.GenericDTO;
-import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.GenericModel;
 import jakarta.annotation.PostConstruct;
 import org.modelmapper.Converter;
@@ -11,10 +9,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
+
 @Component
-public abstract class GenericMapper <E extends GenericModel, D extends GenericDTO>
+public abstract class GenericMapper<E extends GenericModel, D extends GenericDTO>
         implements Mapper<E, D> {
 
+     // Внедрение всех необходимых зависимостей
      private final Class<E> entityClass;
      private final Class<D> dtoClass;
      protected final ModelMapper modelMapper;
@@ -26,6 +26,7 @@ public abstract class GenericMapper <E extends GenericModel, D extends GenericDT
           this.dtoClass = dtoClass;
           this.modelMapper = modelMapper;
      }
+
      @Override
      public E toEntity(D dto) {
           return Objects.isNull(dto)
@@ -46,9 +47,10 @@ public abstract class GenericMapper <E extends GenericModel, D extends GenericDT
      }
 
      @Override
-     public List<D> toDTOs(List<E> entities) {return entities.stream().map(this::toDTO).toList();}
+     public List<D> toDTOs(List<E> entities) {
+          return entities.stream().map(this::toDTO).toList();
+     }
 
-     // Конвертеры для mepSpecificFields
      protected Converter<D, E> toEntityConverter() {
           return context -> {
                D source = context.getSource();
@@ -57,20 +59,25 @@ public abstract class GenericMapper <E extends GenericModel, D extends GenericDT
                return context.getDestination();
           };
      }
-               protected Converter<E, D> toDTOConverter() {
-                    return context -> {
-                         E source = context.getSource();
-                         D destination = context.getDestination();
-                         mapSpecificFields(source, destination);
-                         return context.getDestination();
-                    };
-               }
 
-     protected abstract void mapSpecificFields(D source, E destination);
-     protected abstract void mapSpecificFields(E source, D destination);
+     protected Converter<E, D> toDTOConverter() {
+          return context -> {
+               E source = context.getSource();
+               D destination = context.getDestination();
+               mapSpecificFields(source, destination);
+               return context.getDestination();
+          };
+     }
+
+     protected void mapSpecificFields(D source, E destination) {
+     }
+     protected void mapSpecificFields(E source, D destination) {
+     }
+
 
      @PostConstruct
-     protected abstract void setupMapper();
-     protected abstract List<Long> getIds(E entity);
+     protected  abstract void setupMapper();
+
+     protected abstract List<Long> getIds(E Entity);
 
 }
