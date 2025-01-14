@@ -13,8 +13,7 @@ public enum Genre {
     Genre(String genreTextDisplay) {
         this.genreTextDisplay = genreTextDisplay;
     }
-    public String getGenreTextDisplay() {
-        return genreTextDisplay;
-    }
+
+    public String getGenreTextDisplay(){return genreTextDisplay;}
 }
 

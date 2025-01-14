@@ -1,6 +1,7 @@
 package com.aptproject.springlibraryproject.library.service;
 
 import com.aptproject.springlibraryproject.library.dto.BookDTO;
+import com.aptproject.springlibraryproject.library.dto.BookSearchDTO;
 import com.aptproject.springlibraryproject.library.mapper.BookMapper;
 import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.Book;
@@ -31,6 +32,21 @@ public class BookService extends GenericService<Book, BookDTO> {
         List<BookDTO> result = mapper.toDTOs(booksPaginated.getContent());
         return new PageImpl<>(result, pageable, booksPaginated.getTotalElements());
     }
+
+    public Page<BookDTO> searchBook(BookSearchDTO bookSearchDTO, Pageable pageRequest) {
+        String genre = (bookSearchDTO.getGenre() != null)
+                ? String.valueOf(bookSearchDTO.getGenre().ordinal())
+                : null;
+        Page<Book> booksPaginated = ((BookRepository) repository).searchBooks(
+                bookSearchDTO.getBookTitle(),
+                genre,
+                bookSearchDTO.getAuthorName(),
+                pageRequest
+        );
+        List<BookDTO> result = mapper.toDTOs(booksPaginated.getContent());
+        return new PageImpl<>(result, pageRequest, booksPaginated.getTotalElements());
+    }
+
 
     public BookDTO addAuthor(final Long bookId, final Long authorId) {
         BookDTO book = getOne(bookId);

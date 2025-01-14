@@ -1,6 +1,7 @@
 package com.aptproject.springlibraryproject.library.controllers.mvc;
 
 import com.aptproject.springlibraryproject.library.dto.BookDTO;
+import com.aptproject.springlibraryproject.library.dto.BookSearchDTO;
 import com.aptproject.springlibraryproject.library.service.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,19 @@ public class MVCBookController {
         model.addAttribute("books", books);
         return "books/view-all-books";
     }
+
+    @PostMapping("/search")
+    public String searchBooks(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "5") int pageSize,
+            @ModelAttribute("bookSearchForm") BookSearchDTO bookSearchDTO,
+            Model model) {
+
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "title"));
+        model.addAttribute("books", bookService.searchBook(bookSearchDTO, pageRequest));
+        return "books/view-all-books";
+    }
+
 
     @GetMapping("/add")
     public String create() {
