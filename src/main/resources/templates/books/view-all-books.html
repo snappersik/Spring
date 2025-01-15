@@ -15,52 +15,57 @@
 <body>
 <div layout:fragment="content">
     <div>
-        <hr class="hr">
+        <hr class="hr" />
         <h3>Поиск книги</h3>
         <form method="post" th:action="@{/books/search}" th:object="${bookSearchForm}">
-         <div class="mt-0 row g-2">
-             <div class="col-md">
-                 <div class="form-floating">
-                     <input type="text" name="bookTitle" id="bookTitle" class="form-control" placeholder="введите название">
-                     <label for="bookTitle" class="text-muted small">Название книги</label>
-                 </div>
-             </div>
+            <div class="mt-0 row g-2">
+                <div class="col-md">
+                    <div class="form-floating">
+                        <input type="text" name="bookTitle" id="bookTitle" class="form-control" placeholder="введите название">
+                        <label for="bookTitle" class="text-muted small">Название книги</label>
+                    </div>
+                </div>
 
-             <div class="col-md">
-                 <div class="form-floating">
-                     <input type="text" name="authorName" id="authorName" class="form-control" placeholder="введите автора">
-                     <label for="authorName" class="text-muted small">Имя автора</label>
-                 </div>
-             </div>
+                <div class="col-md">
+                    <div class="form-floating">
+                        <input type="text" name="authorName" id="authorName" class="form-control" placeholder="введите автора">
+                        <label for="authorName" class="text-muted small">Имя автора</label>
+                    </div>
+                </div>
 
-             <div class="col-md">
-                 <div class="form-floating">
-                     <select name="genre" id="genre" class="form-control">
-                         <option selected th:value="null">Выберите жанр</option>
-                         <option th:each="genre : ${T(com.aptproject.springlibraryproject.library.model.Genre).values()}"
-                                 th:value="${genre}" th:text="${genre.getGenreTextDisplay()}"></option>
-                     </select>
-                     <label for="genre" class="text-muted small">Жанр</label>
-                 </div>
-             </div>
-             <div class="row g-2">
-                 <button type="submit" class="btn btn-secondary">Найти книгу</button>
-             </div>
-         </div>
+                <div class="col-md">
+                    <div class="form-floating">
+                        <select name="genre" id="genre" class="form-control">
+                            <option selected th:value="null">Выберите жанр</option>
+                            <option th:each="genre : ${T(com.aptproject.springlibraryproject.library.model.Genre).values()}"
+                                    th:value="${genre}" th:text="${genre.getGenreTextDisplay()}"></option>
+                        </select>
+                        <label for="genre" class="text-muted small">Жанр</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-2 mt-3">
+                <button type="submit" class="btn btn-secondary">Найти книгу</button>
+            </div>
         </form>
+
+
     </div>
-    <div class ="mt-5">
+    <div class="mt-5">
         <div class="row">
             <div class="col">
                 <h2>Все книги библиотеки</h2>
             </div>
             <div class="col">
-                <a sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
-                   th:href="@{/books/add}"
-                   class="btn btn-secondary"
-                   role="button"
-                   style="float: right"
-                   aria-disabled="true">Добавить книгу
+                <a
+                        sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))"
+                        th:href="@{/books/add}"
+                        class="btn btn-secondary"
+                        role="button"
+                        style="float: right"
+                        aria-disabled="true"
+                >Добавить книгу
                 </a>
             </div>
         </div>
@@ -69,11 +74,12 @@
             <tr>
                 <th scope="col">Название</th>
                 <th scope="col">Жанр</th>
-                <th scope="col">Издатель</th>
+                <th scope="col">Количество страниц</th>
                 <th scope="col">Место хранения</th>
                 <th scope="col">Количество</th>
                 <th scope="col">Дата публикации</th>
                 <th scope="col">Автор(ы)</th>
+                <th scope="col">Онлайн копия</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -81,12 +87,17 @@
                 <td th:text="${book.getBookTitle()}"></td>
                 <td th:text="${book.getGenre().getGenreTextDisplay()}"></td>
                 <td th:text="${book.getStoragePlace()}"></td>
-                <td th:classappend="${book.getAmount() <= 0} ? 'not-enough-book'"
-                    th:text="${book.getAmount()} <=0 ? 'Нет в наличии' : ${book.getAmount()}"></td>
+                <td
+                        th:classappend="${book.getAmount() <= 0} ? 'not-enough-book'"
+                        th:text="${book.getAmount()} <=0 ? 'Нет в наличии' : ${book.getAmount()}"
+                ></td>
                 <td th:text="${book.getPublishDate()}"></td>
                 <td>
                     <ul>
-                        <li th:each="author : ${book.getAuthorInfo()}" th:text="${author.getAuthorName()}"></li>
+                        <li
+                                th:each="author : ${book.getAuthorInfo()}"
+                                th:text="${author.getAuthorName()}"
+                        ></li>
                     </ul>
                 </td>
             </tr>
@@ -95,22 +106,44 @@
     <div>
         <nav aria-label="Pagination" th:if="${books.totalPages gt 0}">
             <ul class="pagination justify-content-center font-weight-bold">
-                <li class="page-item" th:classappend="${books.number eq 0} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/books?page={id}(id=${books.number lt 2 ? 1 : books.number})}"
-                       aria-label="Previous" title="Previous Page" data-toggle="tooltip">
+                <li
+                        class="page-item"
+                        th:classappend="${books.number eq 0} ? 'disabled'"
+                >
+                    <a
+                            class="page-link"
+                            th:href="@{/books?page={id}(id=${books.number lt 2 ? 1 : books.number})}"
+                            aria-label="Previous"
+                            title="Previous Page"
+                            data-toggle="tooltip"
+                    >
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
-                <li class="page-item" th:classappend="${i eq books.number + 1} ? 'active'"
-                    th:each="i : ${#numbers.sequence( 1, books.totalPages, 1)}">
-                    <a class="page-link" th:href="@{/books?page={id}(id=${i})}" th:text="${i}"
-                       th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+                <li
+                        class="page-item"
+                        th:classappend="${i eq books.number + 1} ? 'active'"
+                        th:each="i : ${#numbers.sequence( 1, books.totalPages, 1)}"
+                >
+                    <a
+                            class="page-link"
+                            th:href="@{/books?page={id}(id=${i})}"
+                            th:text="${i}"
+                            th:title="${'Page '+ i}"
+                            data-toggle="tooltip"
+                    ></a>
                 </li>
-                <li class="page-item" th:classappend="${books.number eq books.totalPages - 1} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/books?page={id}(id=${books.number + 2})}"
-                       aria-label="Next" title="Next Page" data-toggle="tooltip">
+                <li
+                        class="page-item"
+                        th:classappend="${books.number eq books.totalPages - 1} ? 'disabled'"
+                >
+                    <a
+                            class="page-link"
+                            th:href="@{/books?page={id}(id=${books.number + 2})}"
+                            aria-label="Next"
+                            title="Next Page"
+                            data-toggle="tooltip"
+                    >
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
