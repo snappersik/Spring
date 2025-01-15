@@ -8,7 +8,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h3 class="mt-3 mb-3">Добавить автоа</h3>
+    <h3 class="mt-3 mb-3">Добавить автора</h3>
 
     <form style="max-width: 50vh;" method="post" th:action="@{/authors/add}" th:object="${authorForm}">
 
@@ -21,7 +21,7 @@
 
         <div class="mb-3">
             <label class="form-label" for="birthdate">
-                Дата ождения
+                Дата рождения
             </label>
             <input type="date" name="birthDate" class="form-control" id="birthdate">
         </div>

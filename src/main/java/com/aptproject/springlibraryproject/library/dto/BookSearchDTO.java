@@ -1,5 +1,6 @@
 package com.aptproject.springlibraryproject.library.dto;
 
+import com.aptproject.springlibraryproject.library.model.Genre;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,5 +11,5 @@ import lombok.ToString;
 public class BookSearchDTO {
     private String bookTitle;
     private String authorName;
-    private String genre;
+    private Genre genre;
 }

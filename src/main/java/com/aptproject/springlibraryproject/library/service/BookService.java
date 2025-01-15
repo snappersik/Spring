@@ -37,6 +37,7 @@ public class BookService extends GenericService<Book, BookDTO> {
         String genre = (bookSearchDTO.getGenre() != null)
                 ? String.valueOf(bookSearchDTO.getGenre().ordinal())
                 : null;
+
         Page<Book> booksPaginated = ((BookRepository) repository).searchBooks(
                 bookSearchDTO.getBookTitle(),
                 genre,

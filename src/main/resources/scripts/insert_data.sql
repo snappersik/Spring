@@ -71,3 +71,7 @@ INSERT INTO public.books_authors (book_id, author_id)
 VALUES (7, 6);
 INSERT INTO public.books_authors (book_id, author_id)
 VALUES (7, 7);
+
+select * from authors;
+select * from books;
+select * from books_authors;
