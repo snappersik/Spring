@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
 @Slf4j
+@Controller
 @RequestMapping("/books")
 public class MVCBookController {
 
@@ -25,27 +25,38 @@ public class MVCBookController {
     }
 
     @GetMapping
-    public String getAll(@RequestParam(value = "page", defaultValue = "1") int page,
-                         @RequestParam(value = "size", defaultValue = "5") int pageSize,
-                         Model model) {
-        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "bookTitle"));
+    public String getAll(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "5") int pageSize,
+            Model model
+    ) {
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC,
+                "bookTitle"));
         Page<BookDTO> books = bookService.getAllBooks(pageRequest);
         model.addAttribute("books", books);
         return "books/view-all-books";
     }
+
+    @GetMapping("/{id}") // localhost:8080/books/30
+    public String getOne(@PathVariable Long id,
+                         Model model) {
+        model.addAttribute("book", bookService.getOne(id));
+        return "books/view-book";
+    }
+
 
     @PostMapping("/search")
     public String searchBooks(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "5") int pageSize,
             @ModelAttribute("bookSearchForm") BookSearchDTO bookSearchDTO,
-            Model model) {
-
-        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "title"));
+            Model model
+    ) {
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC,
+                "title"));
         model.addAttribute("books", bookService.searchBook(bookSearchDTO, pageRequest));
         return "books/view-all-books";
     }
-
 
     @GetMapping("/add")
     public String create() {
@@ -58,4 +69,5 @@ public class MVCBookController {
         bookService.create(newBook);
         return "redirect:/books";
     }
+
 }

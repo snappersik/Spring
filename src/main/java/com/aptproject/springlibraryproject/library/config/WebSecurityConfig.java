@@ -13,61 +13,47 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.List;
 
+import static com.aptproject.springlibraryproject.library.constants.SecurityConstants.*;
 import static com.aptproject.springlibraryproject.library.constants.UserRoleConstants.ADMIN;
 import static com.aptproject.springlibraryproject.library.constants.UserRoleConstants.LIBRARIAN;
+
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;   // После CustomUserDetails
+    private final CustomUserDetailsService customUserDetailsService; // После CustomUserDetails
 
     public WebSecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, CustomUserDetailsService customUserDetailsService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.customUserDetailsService = customUserDetailsService;
-    }
-
-    private final List<String> RESOURCES_WHITE_LIST = List.of(
-            "/resources/**",
-            "/static/**",
-            "/js/**",
-            "/css/**",
-            "/",
-            "/swagger-ui/**" //todo протестировать / перед Swagger
-    );
-    private final List<String> BOOKS_WHITE_LIST= List.of("/books");
-    private final List<String> BOOKS_PERMISSIONS_LIST = List.of(
-            "/book/add",
-            "/books/update",
-            "/books/delete"
-    );
-    private final List<String> USER_WHITE_LIST = List.of(
-            "/login",
-            "/users",
-            "users/remember-password"
-    );
+    } // После CustomUserDetails
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception { // является builder'ом
         httpSecurity
-                .cors().disable() //TODO ТЕСТ БЕЗ CORS/CSRF
-                .csrf().disable()
+                .cors().disable() // Cross-Origin Resource Sharing - Это механизм браузера, который позволяет определить
+                // список ресурсов, к которым страница может получить доступ.
+                .csrf().disable() // Cross-Site Request Forgery
+                //Настройка http-запросов - кому/куда можно/нельзя
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(RESOURCES_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(BOOKS_WHITE_LIST.toArray(String[]::new)).permitAll()
-                        .requestMatchers(BOOKS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
-                        .anyRequest().authenticated() //Все прочие запросы доступны аутентефецированным пользователям
+                        .requestMatchers(USERS_WHITE_LIST.toArray(String[]::new)).permitAll()
+                        .requestMatchers(BOOKS_PERMISSION_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
+                        .anyRequest().authenticated() // Все прочие запросы доступны аутентифицированным пользователям
                 )
-                //Настраиваем вход в систему
+                //Настройка для входа в систему
                 .formLogin((form) -> form
                         .loginPage("/login")
+                        //Перенаправляем на главную страницу после успеха
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )
-                .logout((logout) ->logout
+                .logout((logout) -> logout
                         .logoutUrl("/logout")
-                        .logoutUrl("/login")
+                        .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
@@ -78,8 +64,7 @@ public class WebSecurityConfig {
     }
 
     @Autowired
-    protected  void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
-
 }

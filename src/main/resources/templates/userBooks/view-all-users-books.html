@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои книги</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="mt-5">
+        <h1>Мои книги</h1>
+        <table class="table table-hover mt-3">
+            <thead>
+            <tr>
+                <th scope="col">Книга</th>
+                <th scope="col">Дата аренды книги</th>
+                <th scope="col">Плановая дата возвращения</th>
+                <th scope="col">Фактическая дата возвращения</th>
+                <th scope="col">Возвращена</th>
+                <th scope="col">Период аренды</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rent: ${rentBooks}">
+                <td>
+                    <span th:if="${!rent.getBookDTO().isDeleted()}">
+                     <a class="text-link text-blue" th:href="'/books/' + ${rent.getBookDTO().getId()}" th:text="${rent.getBookDTO().getBookTitle()}"></a>
+                    </span>
+                    <span th:unless="${!rent.getBookDTO().isDeleted()}" th:text="${rent.getBookDTO().getBookTitle()}"></span>
+                </td>
+                <td th:text="${#temporals.format(rent.getRentDate(), 'dd-MM-yyyy')}"></td>
+                <td th:text="${#temporals.format(rent.getRentDate().plusDays(rent.getRentPeriod()), 'dd-MM-yyyy')}"></td>
+                <td>
+                    <span th:if="${rent.getReturned()}"
+                          th:text="${#temporals.format(rent.getReturnDate(), 'dd-MM-yyyy')}"></span>
+                </td>
+                <td th:text="${rent.getReturned()} ? 'Да' : 'Нет'"></td>
+                <td th:text="${rent.getRentPeriod()} + ' дней'"></td>
+                <td>
+                    <a
+                            th:if="!${rent.getReturned()}"
+                            th:href="'/rent/return-book/' + ${rent.getId()}"
+                            class="btn btn-primary"
+                            role="button"
+                            aria-disabled="true">Вернуть книгу</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button sec:authorize="isAuthenticated() && (hasRole('ADMIN'))" type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+    </div>
+
+    <nav aria-label="Pagination" th:if="${rentBooks.totalPages gt 0}">
+        <ul class="pagination justify-content-center font-weight-bold">
+            <li class="page-item" th:classappend="${rentBooks.number eq 0} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/rentBooks?page={id}(id=${rentBooks.number lt 2 ? 1 : rentBooks.number})}"
+                   aria-label="Previous" title="Previous Page" data-toggle="tooltip">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(1, rentBooks.totalPages, 1)}"
+                th:classappend="${i eq rentBooks.number + 1} ? 'active'">
+                <a class="page-link" th:href="@{/rentBooks?page={id}(id=${i})}" th:text="${i}"
+                   th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+            </li>
+            <li class="page-item" th:classappend="${rentBooks.number eq rentBooks.totalPages - 1} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/rentBooks?page={id}(id=${rentBooks.number + 2})}"
+                   aria-label="Next" title="Next Page" data-toggle="tooltip">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>

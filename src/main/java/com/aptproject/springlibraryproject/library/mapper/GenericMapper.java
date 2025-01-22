@@ -10,11 +10,19 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Абстрактный маппер, который реализует основные операции конвертации ИЗ СУЩНОСТИ В ДТО
+ * и обратно. С помощью этого класса мы фиксируем основные методы по работе с маппером,
+ * а так-же определили абстрактные методы, которые описывают правила формирования различающихся полей
+ *
+ * @param <E> - Сущность с которой мы работаем
+ * @param <D> - DTO, которую мы будем отдавать/принимать дальше
+ */
 @Component
 public abstract class GenericMapper<E extends GenericModel, D extends GenericDTO>
         implements Mapper<E, D> {
 
-     // Внедрение всех необходимых зависимостей
+     // Внедряем то, с чем будем работать
      private final Class<E> entityClass;
      private final Class<D> dtoClass;
      protected final ModelMapper modelMapper;
@@ -27,6 +35,7 @@ public abstract class GenericMapper<E extends GenericModel, D extends GenericDTO
           this.modelMapper = modelMapper;
      }
 
+     // описываем логику методов, обозначенных в интерфейсе Mapper
      @Override
      public E toEntity(D dto) {
           return Objects.isNull(dto)
@@ -51,6 +60,7 @@ public abstract class GenericMapper<E extends GenericModel, D extends GenericDTO
           return entities.stream().map(this::toDTO).toList();
      }
 
+     // Конвертеры для mapSpecificFields
      protected Converter<D, E> toEntityConverter() {
           return context -> {
                D source = context.getSource();
@@ -69,15 +79,16 @@ public abstract class GenericMapper<E extends GenericModel, D extends GenericDTO
           };
      }
 
-     protected void mapSpecificFields(D source, E destination) {
-     }
-     protected void mapSpecificFields(E source, D destination) {
-     }
+     // маппинг нестандартных полей
+     protected abstract void mapSpecificFields(D source, E destination);
+     protected abstract void mapSpecificFields(E source, D destination);
 
-
+     /**
+      * Настройка маппера (что делать и что вызывать в случае несовпадения типов данных сорса/дестинейшена)
+      */
      @PostConstruct
-     protected  abstract void setupMapper();
+     protected abstract void setupMapper();
 
-     protected abstract List<Long> getIds(E Entity);
+     protected abstract List<Long> getIds(E entity);
 
 }

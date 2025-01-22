@@ -3,6 +3,7 @@ package com.aptproject.springlibraryproject.library.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,7 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @SequenceGenerator(name = "default_generator", sequenceName = "book_rent_seq_info", allocationSize = 1)
 public class BookRentInfo extends GenericModel {
-    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+
+    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // у одного пользователя могут много аренд
     @JoinColumn(name = "user_id", nullable = false,
             foreignKey = @ForeignKey(name = "FK_RENT_BOOK_INFO_USER"))
     private User user;
@@ -24,10 +26,10 @@ public class BookRentInfo extends GenericModel {
     private Book book;
 
     @Column(name = "rent_date", nullable = false)
-    private LocalDateTime rentDate;
+    private LocalDate rentDate;
 
     @Column(name = "return_date", nullable = false)
-    private LocalDateTime returnDate;
+    private LocalDate returnDate;
 
     @Column(name = "rent_period", nullable = false)
     private Integer rentPeriod;

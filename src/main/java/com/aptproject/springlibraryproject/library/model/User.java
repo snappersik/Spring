@@ -6,10 +6,11 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity 
+@Entity
 @Table(name = "users",
         uniqueConstraints = {@UniqueConstraint(name = "uniqueEmail", columnNames = "email"),
-                @UniqueConstraint(name = "uniqueLogin", columnNames = "login")})
+                @UniqueConstraint(name = "uniqueLogin", columnNames = "login")
+        }) // email и login должны быть уникальными
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,11 +45,12 @@ public class User extends GenericModel{
     @Column(name = "address", nullable = false)
     private String address;
 
-    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne (cascade = CascadeType.MERGE) // много пользователей могут иметь одну роль
     @JoinColumn(name = "role_id", nullable = false,
-        foreignKey = @ForeignKey(name = "USERS_ROLES"))
+            foreignKey = @ForeignKey(name = "USERS_ROLES"))
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<BookRentInfo> bookRentInfos;
+
 }

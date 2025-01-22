@@ -12,7 +12,8 @@ public interface SecurityConstants {
             "/v3/api-docs/**"
     );
     List<String> BOOKS_WHITE_LIST = List.of(
-            "/books"
+            "/books/search",
+            "/books/{id}"
     );
     List<String> BOOKS_PERMISSION_LIST = List.of(
             "/books/add",

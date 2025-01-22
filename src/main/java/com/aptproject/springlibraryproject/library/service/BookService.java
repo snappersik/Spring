@@ -16,14 +16,14 @@ import org.webjars.NotFoundException;
 import java.util.List;
 
 @Service
-public class BookService extends GenericService<Book, BookDTO> {
-
+public class BookService
+        extends GenericService<Book, BookDTO> {
     private final AuthorRepository authorRepository;
 
-    protected BookService(BookRepository bookRepository,
-                          BookMapper bookMapper,
+    protected BookService(BookRepository repository,
+                          BookMapper mapper,
                           AuthorRepository authorRepository) {
-        super(bookRepository, bookMapper);
+        super(repository, mapper);
         this.authorRepository = authorRepository;
     }
 
@@ -33,8 +33,10 @@ public class BookService extends GenericService<Book, BookDTO> {
         return new PageImpl<>(result, pageable, booksPaginated.getTotalElements());
     }
 
-    public Page<BookDTO> searchBook(BookSearchDTO bookSearchDTO, Pageable pageRequest) {
-        String genre = (bookSearchDTO.getGenre() != null)
+    public Page<BookDTO> searchBook(BookSearchDTO bookSearchDTO,
+                                    Pageable pageRequest) {
+
+        String genre = bookSearchDTO.getGenre() != null
                 ? String.valueOf(bookSearchDTO.getGenre().ordinal())
                 : null;
 
@@ -44,17 +46,21 @@ public class BookService extends GenericService<Book, BookDTO> {
                 bookSearchDTO.getAuthorName(),
                 pageRequest
         );
+
         List<BookDTO> result = mapper.toDTOs(booksPaginated.getContent());
         return new PageImpl<>(result, pageRequest, booksPaginated.getTotalElements());
+
     }
 
 
-    public BookDTO addAuthor(final Long bookId, final Long authorId) {
+    public BookDTO addAuthor(final Long bookId,
+                             final Long authorId) {
         BookDTO book = getOne(bookId);
-        Author author = authorRepository.findById(authorId).
-                orElseThrow(() -> new NotFoundException("Автор не найден."));
+        Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException("автор не найден"));
         book.getAuthorIds().add(author.getId());
         update(book);
         return book;
     }
+
+
 }

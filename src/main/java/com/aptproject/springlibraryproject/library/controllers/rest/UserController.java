@@ -26,7 +26,6 @@ import java.util.Map;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @Tag(name = "Пользователи",
         description = "Контроллер для работы с пользователями библиотеки")
-
 public class UserController
         extends GenericController<User, UserDTO> {
 
@@ -48,19 +47,16 @@ public class UserController
     public ResponseEntity<?> auth(@RequestBody LoginDTO loginDTO) {
         Map<String, Object> response = new HashMap<>();
         UserDetails foundUser = customUserDetailsService.loadUserByUsername(loginDTO.getLogin());
-
         log.info("foundUser: {}", foundUser);
-
-        if (!userService.checkPassword(loginDTO.getPassword(), foundUser)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Ошибка авторизации! \n Неверный пароль…");
+        if (!userService.checkPassword(loginDTO.getPassword(), foundUser)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Ошибка авторизации! \n Неверный пароль...");
         }
-
         String token = jwtTokenUtil.generateToken(foundUser);
         response.put("token", token);
         response.put("username", foundUser.getUsername());
         response.put("role", foundUser.getAuthorities());
-
         return ResponseEntity.ok().body(response);
     }
 }
+
 

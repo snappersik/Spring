@@ -17,7 +17,7 @@ values ('Война и Мир', 'Л. Н. Толстой', now() - interval '24h'
 insert into public.books (title, author, date_added)
 values ('Братья Карамазовы', 'Ф. М. Достоевский', now() - interval '24h');
 
-select * from public.roles
+select * from public.roles;
 
 insert into public.roles
 values

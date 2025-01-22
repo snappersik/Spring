@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр книги</title>
+</head>
+<body>
+<form layout:fragment="content">
+    <div>
+        <h3 th:text="'Информация о книге: ' + ${book.getBookTitle()}"></h3>
+        <form class="row g-1">
+            <div class="mb-2 row">
+                <label for="bookTitle" class="col-sm-2 col-form-label no-border">Название:</label>
+                <div class="col-sm-10">
+                    <p th:text="${book.getBookTitle()}" type="text" readonly class="form-control-plaintext" id="bookTitle">
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label for="genre" class="col-sm-2 col-form-label">Жанр:</label>
+                <div class="col-sm-10">
+                    <p th:text="${book.getGenre().getGenreTextDisplay()}" class="form-control-plaintext" id="genre">
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label class="col-sm-2 col-form-label">Онлайн копия:</label>
+                <div class="col-sm-10">
+                    <a class="text-link text-blue" th:if="${book.getOnlineCopyPath()} != null" th:href="@{|/books/download?bookId=${book.id}|}">
+                        <span>Скачать книгу</span>
+                    </a>
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label for="amount" class="col-sm-2 col-form-label">Количество экземпляров в наличии:</label>
+                <div class="col-sm-10">
+                    <p th:text="${book.getAmount()}" class="form-control-plaintext" id="amount">
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label for="pages" class="col-sm-2 col-form-label">Количество страниц:</label>
+                <div class="col-sm-10">
+                    <p th:text="${book.getPageCount()}" class="form-control-plaintext" id="pages">
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label for="publisher" class="col-sm-2 col-form-label">Издательство:</label>
+                <div class="col-sm-10">
+                    <p th:text="${book.getPublisher()}" class="form-control-plaintext" id="publisher">
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label for="date" class="col-sm-2 col-form-label">Дата издательства:</label>
+                <div class="col-sm-10">
+                    <p th:text="${book.getPublishDate()}" class="form-control-plaintext" id="date">
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label for="desc" class="col-sm-2 col-form-label">Описание:</label>
+                <div class="col-sm-10">
+                    <p th:text="${book.getDescription()}" class="form-control-plaintext" id="desc">
+                </div>
+            </div>
+        </form>
+        <hr class="hr"/>
+        <form class="row g-1">
+            <h4 class="mt-3 mb-3" th:text="'Информация об авторе(ах)'"></h4>
+            <div th:each="author : ${book.getAuthorInfo()}">
+                <div class="mb-2 row">
+                    <label for="name" class="col-sm-2 col-form-label">ФИО:</label>
+                    <div class="col-sm-10">
+                        <a class="text-link text-blue" th:href="'/authors/' + ${author.getId()}" th:text="${author.getAuthorName()}" id="name"></a>
+                    </div>
+                </div>
+                <div class="mb-2 row">
+                    <label for="date_birth" class="col-sm-2 col-form-label">Дата рождения:</label>
+                    <div class="col-sm-10">
+                        <p th:text="${author.getBirthDate()}" class="form-control-plaintext" id="date_birth">
+                    </div>
+                </div>
+                <div class="mb-2 row">
+                    <label for="desc_author" class="col-sm-2 col-form-label">Описание:</label>
+                    <div class="col-sm-10">
+                        <p th:text="${author.getDescription()}" class="form-control-plaintext" id="desc_author">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <hr class="hr"/>
+        <div class="mt-2">
+            <a th:if="${book.getAmount() > 0}" sec:authorize="!hasRole('ADMIN')" class="btn btn-primary"
+               th:href="'/rent/book/' + ${book.id}">Арендовать книгу</a>
+            <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
+

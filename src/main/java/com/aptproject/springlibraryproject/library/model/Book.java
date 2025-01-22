@@ -28,11 +28,11 @@ public class Book extends GenericModel {
     @Column(name = "publish_date", nullable = false)
     private LocalDate publishDate;
 
-    @Column(name = "page_count")
-    private Integer pageCount;
-
     @Column(name = "amount", nullable = false)
     private Integer amount;
+
+    @Column(name = "page_count")
+    private Integer pageCount;
 
     @Column(name = "storage_place", nullable = false)
     private String storagePlace;
@@ -41,16 +41,18 @@ public class Book extends GenericModel {
     private String onlineCopyPath;
 
     @Column(name = "genre", nullable = false)
-    @Enumerated (value = EnumType.STRING) // чтобы enum не выводился в числовом значении
+    @Enumerated
     private Genre genre;
 
     @Column(name = "description")
     private String description;
+
 
     @JsonIgnore // Избавляет от ошибки Stack Overflow, JSON зацикливается: У книги есть автор, у автора есть книга, у книги есть автор...
     @ManyToMany (cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "books_authors", // чтобы таблицы books и authors стали равнозначными. До этого authors была главнее
             joinColumns = @JoinColumn(name = "book_id"), foreignKey = @ForeignKey(name = "FK_BOOKS_AUTHORS"),
             inverseJoinColumns = @JoinColumn(name = "author_id"), inverseForeignKey = @ForeignKey(name = "FK_AUTHORS_BOOKS"))
+
     List<Author> authors;
 }

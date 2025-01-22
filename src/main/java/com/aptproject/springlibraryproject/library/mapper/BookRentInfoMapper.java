@@ -1,61 +1,65 @@
 package com.aptproject.springlibraryproject.library.mapper;
 
-import com.aptproject.springlibraryproject.library.dto.AuthorDTO;
 import com.aptproject.springlibraryproject.library.dto.BookRentInfoDTO;
-import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.BookRentInfo;
-import com.aptproject.springlibraryproject.library.model.GenericModel;
 import com.aptproject.springlibraryproject.library.repository.BookRepository;
 import com.aptproject.springlibraryproject.library.repository.UserRepository;
+import com.aptproject.springlibraryproject.library.service.BookService;
+import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.webjars.NotFoundException;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Component
-public class BookRentInfoMapper extends GenericMapper <BookRentInfo, BookRentInfoDTO> {
+public class BookRentInfoMapper
+        extends GenericMapper<BookRentInfo, BookRentInfoDTO> {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final BookService bookService;
 
-    public BookRentInfoMapper(ModelMapper modelMapper,
-                              BookRepository bookRepository,
-                              UserRepository userRepository) {
-        super(BookRentInfo.class, BookRentInfoDTO.class, modelMapper);
+    protected BookRentInfoMapper(ModelMapper mapper,
+                                 BookRepository bookRepository,
+                                 UserRepository userRepository, BookService bookService) {
+        super(BookRentInfo.class, BookRentInfoDTO.class, mapper);
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+        this.bookService = bookService;
     }
 
-
+    @PostConstruct
     @Override
-    protected void setupMapper() {
-        modelMapper.createTypeMap(BookRentInfo.class, BookRentInfoDTO.class)
-                .addMappings(mapping -> mapping.skip(BookRentInfoDTO::setBookId))
-                .addMappings(mapping -> mapping.skip(BookRentInfoDTO::setUserId))
+    public void setupMapper() {
+        super.modelMapper.createTypeMap(BookRentInfo.class, BookRentInfoDTO.class) //
+                .addMappings(m -> m.skip(BookRentInfoDTO::setUserId))
+                .addMappings(m -> m.skip(BookRentInfoDTO::setBookId))
+                .addMappings(m -> m.skip(BookRentInfoDTO::setBookDTO))
                 .setPostConverter(toDTOConverter());
-        modelMapper.createTypeMap(BookRentInfoDTO.class, BookRentInfo.class)
-                .addMappings(mapping -> mapping.skip(BookRentInfo::setUser))
-                .addMappings(mapping -> mapping.skip(BookRentInfo::setBook))
+
+        super.modelMapper.createTypeMap(BookRentInfoDTO.class, BookRentInfo.class)
+                .addMappings(m -> m.skip(BookRentInfo::setUser))
+                .addMappings(m -> m.skip(BookRentInfo::setBook))
                 .setPostConverter(toEntityConverter());
     }
 
+    @Override
     protected void mapSpecificFields(BookRentInfoDTO source, BookRentInfo destination) {
         destination.setBook(bookRepository.findById(source.getBookId()).orElseThrow(() ->
-                new NotFoundException("Книга не найдена")));
+                new NotFoundException("Книги не найдено")));
         destination.setUser(userRepository.findById(source.getUserId()).orElseThrow(() ->
-                new NotFoundException("Пользователь не найден")));
-    }
-
-    protected void mapSpecificFields(BookRentInfo source, BookRentInfoDTO destination) {
-        destination.setUserId(source.getId());
-        destination.setBookId(source.getId());
+                new NotFoundException("Пользователя не найдено")));
     }
 
     @Override
-    protected List<Long> getIds(BookRentInfo source) {
-        throw new UnsupportedOperationException("Метода недоступен");
+    protected void mapSpecificFields(BookRentInfo source, BookRentInfoDTO destination) {
+        destination.setUserId(source.getUser().getId());
+        destination.setBookId(source.getBook().getId());
+        destination.setBookDTO(bookService.getOne(source.getBook().getId()));
+    }
+
+    @Override
+    protected List<Long> getIds(BookRentInfo entity) {
+        throw new UnsupportedOperationException("Метод недоступен");
     }
 }
