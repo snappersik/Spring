@@ -34,25 +34,28 @@ INSERT INTO authors (id, created_by, created_when, name, description, birth_date
 VALUES (nextval('public.authors_sequence'), 'admin', '2022-11-15 13:51:08.314682', 'Илья Ильф', 'настоящее имя — Иехиел-Лейб бен Арьевич Файнзильберг; 1897—1937', '1897-01-01');
 INSERT INTO authors (id, created_by, created_when, name, description, birth_date)
 VALUES (nextval('public.authors_sequence'), 'admin', '2022-11-15 13:51:08.314682', 'Евгений Петров', 'настоящее имя — Евгений Петрович Катаев; 1902—1942', '1902-01-01');
+
+
 --BOOKS
 drop sequence books_sequence;
 create sequence books_sequence;
 alter sequence books_sequence owner to postgres;
 truncate table books cascade;
 INSERT INTO books (id, created_by, created_when, amount, genre, online_copy_path, publish_date, storage_place, title, publisher, page_count)
-VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:54:28.115079', 100, 'NOVEL', null, '1966-01-01', '1-М', 'Мастер и Маргарита', 'журнал «Москва»', 416);
+VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:54:28.115079', 100, 1, null, '1966-01-01', '1-М', 'Мастер и Маргарита', 'журнал «Москва»', 416);
 INSERT INTO books (id, created_by, created_when, amount, genre, online_copy_path, publish_date, storage_place, title, publisher, page_count)
-VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:56:12.600618', 10, 'NOVEL', null, '1925-01-01', '1-Б', 'Белая Гвардия', 'журнал «Россия»', 416);
+VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:56:12.600618', 10, 1, null, '1925-01-01', '1-Б', 'Белая Гвардия', 'журнал «Россия»', 416);
 INSERT INTO books (id, created_by, created_when, amount, genre, online_copy_path, publish_date, storage_place, title, publisher, page_count)
-VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:57:05.231780', 11, 'NOVEL', null, '2023-01-15', '17-Г', 'Грозовой перевал', 'Азбука, 2023 г.', 384);
+VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:57:05.231780', 11, 2, null, '2023-01-15', '17-Г', 'Грозовой перевал','Азбука, 2023 г.', 384);
 INSERT INTO books (id, created_by, created_when, amount, genre, online_copy_path, publish_date, storage_place, title, publisher, page_count)
-VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:57:43.883671', 11, 'NOVEL', null, '2022-01-01', '1-И', 'Идиот', 'Эксмо', 636);
+VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:57:43.883671', 11, 4, null, '2022-01-01', '1-И', 'Идиот', 'Эксмо', 636);
 INSERT INTO books (id, created_by, created_when, amount, genre, online_copy_path, publish_date, storage_place, title, publisher, page_count)
-VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:58:12.172216', 111, 'DRAMA', null, '2022-03-22', '13-Г', 'Гордость и предубеждение', 'АСТ', 416);
+VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:58:12.172216', 111, 3, null, '2022-03-22', '13-Г', 'Гордость и предубеждение', 'АСТ', 416);
 INSERT INTO books (id, created_by, created_when, amount, genre, online_copy_path, publish_date, storage_place, title, publisher, page_count)
-VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:58:12.172216', 110, 'COMEDY', null, '2016-03-11', '1-Г', 'Горе от ума', 'Азбука', 256);
+VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:58:12.172216', 110, 4, null, '2016-03-11', '1-Г', 'Горе от ума', 'Азбука', 256);
 INSERT INTO books (id, created_by, created_when, amount, genre, online_copy_path, publish_date, storage_place, title, publisher, page_count)
-VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:58:12.172216', 2, 'NOVEL', null, '2016-03-11', '1-Г', 'Золотой теленок', 'Текст', 432);
+VALUES (nextval('public.books_sequence'), 'admin', '2022-11-15 13:58:12.172216', 2, 5, null, '2016-03-11', '1-Г', 'Золотой теленок', 'Текст', 432);
+
 
 --BOOKS_AUTHORS
 INSERT INTO public.books_authors (book_id, author_id)
@@ -72,6 +75,11 @@ VALUES (7, 6);
 INSERT INTO public.books_authors (book_id, author_id)
 VALUES (7, 7);
 
+--alter sequence authors_sequence start with 1;
+
+select * from roles;
 select * from authors;
 select * from books;
 select * from books_authors;
+
+

@@ -18,3 +18,4 @@ public class AuthorDTO extends GenericDTO {
     private String description;
     List<Long> booksIds;
 }
+

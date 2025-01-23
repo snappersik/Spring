@@ -20,8 +20,8 @@ public interface BookRepository extends GenericRepository<Book>{
                          and cast(b.genre as char) like coalesce(:genre, '%')
                          and coalesce(a.name, '%') ilike '%' ||  coalesce(:name, '%')  || '%'
                          and b.is_deleted = false
-                    """)
-
+                    """
+    )
 
     Page<Book> searchBooks(@Param(value = "title") String bookTitle,
                            @Param(value = "genre") String genre,
