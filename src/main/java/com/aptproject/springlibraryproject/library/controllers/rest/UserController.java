@@ -58,5 +58,3 @@ public class UserController
         return ResponseEntity.ok().body(response);
     }
 }
-
-

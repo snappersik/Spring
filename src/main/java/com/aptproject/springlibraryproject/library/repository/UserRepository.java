@@ -10,4 +10,6 @@ public interface UserRepository extends GenericRepository<User>{
 
     User findUserByEmail(String email);
 
+    User findUserByChangePasswordToken(String uuid);
+
 }

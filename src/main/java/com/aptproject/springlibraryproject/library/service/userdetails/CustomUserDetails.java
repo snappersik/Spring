@@ -1,10 +1,14 @@
 package com.aptproject.springlibraryproject.library.service.userdetails;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomUserDetails implements UserDetails {
     private final String password;
@@ -32,28 +36,62 @@ public class CustomUserDetails implements UserDetails {
 
     }
 
-    @Override public Collection<? extends GrantedAuthority> getAuthorities () {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
-    @Override public String getPassword () {
+
+    @Override
+    public String getPassword() {
         return password;
     }
-    @Override public String getUsername () {
+
+    @Override
+    public String getUsername() {
         return username;
     }
-    @Override public boolean isAccountNonExpired () {
+
+    @Override
+    public boolean isAccountNonExpired() {
         return accountNotExpired;
     }
-    @Override public boolean isAccountNonLocked() {
+
+    @Override
+    public boolean isAccountNonLocked() {
         return accountNotLocked;
     }
-    @Override public boolean isCredentialsNonExpired() {
+
+    @Override
+    public boolean isCredentialsNonExpired() {
         return credentialsNonExpired;
     }
-    @Override public boolean isEnabled() {
+
+    @Override
+    public boolean isEnabled() {
         return enabled;
     }
-    public Integer getUserId () {
+
+    public Integer getUserId() {
         return id;
+    }
+    @Override
+    public String toString() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(getFieldsToInclude());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return super.toString();
+
+    }
+
+    private Object getFieldsToInclude() {
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("user_id", id);
+        fields.put("username", username);
+        fields.put("user_role", authorities);
+        fields.put("password", password);
+        return fields;
     }
 }

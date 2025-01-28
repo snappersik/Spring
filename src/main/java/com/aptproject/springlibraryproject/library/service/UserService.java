@@ -1,25 +1,35 @@
 package com.aptproject.springlibraryproject.library.service;
 
+import com.aptproject.springlibraryproject.library.constants.MailConstants;
 import com.aptproject.springlibraryproject.library.dto.RoleDTO;
 import com.aptproject.springlibraryproject.library.dto.UserDTO;
 import com.aptproject.springlibraryproject.library.mapper.GenericMapper;
 import com.aptproject.springlibraryproject.library.model.User;
 import com.aptproject.springlibraryproject.library.repository.GenericRepository;
 import com.aptproject.springlibraryproject.library.repository.UserRepository;
+import com.aptproject.springlibraryproject.utils.MailUtils;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
+import java.util.UUID;
 
+@Slf4j
 @Service
-public class UserService extends GenericService<User, UserDTO> {
+public class UserService
+        extends GenericService<User, UserDTO> {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JavaMailSender javaMailSender;
 
     public UserService(GenericRepository<User> repository,
-                       GenericMapper<User, UserDTO> mapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+                       GenericMapper<User, UserDTO> mapper,
+                       BCryptPasswordEncoder bCryptPasswordEncoder, JavaMailSender javaMailSender) {
         super(repository, mapper);
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.javaMailSender = javaMailSender;
     }
 
     @Override
@@ -38,10 +48,35 @@ public class UserService extends GenericService<User, UserDTO> {
     }
 
     public UserDTO getUserByEmail(final String email) {
-        return mapper.toDTO(((UserRepository) repository).findUserByLogin(email));
+        return mapper.toDTO(((UserRepository) repository).findUserByEmail(email));
     }
 
     public boolean checkPassword(String password, UserDetails foundUser) {
         return bCryptPasswordEncoder.matches(password, foundUser.getPassword());
     }
+
+    public void sendChangePasswordEmail(final UserDTO userDTO) {
+        UUID uuid = UUID.randomUUID(); // генерация токена
+        log.info("Токен: {}", uuid);
+        userDTO.setChangePasswordToken(String.valueOf(uuid));
+        update(userDTO);
+
+        SimpleMailMessage mailMessage = MailUtils.createMailMessage(
+                userDTO.getEmail(),
+                "spring.project.42@mail.ru",
+                MailConstants.MAIL_SUBJECT_FOR_REMEMBER_PASSWORD,
+                MailConstants.MAIL_MESSAGE_FOR_REMEMBER_PASSWORD + uuid
+        );
+
+        javaMailSender.send(mailMessage);
+
+    }
+
+    public void changePassword(String uuid, String password){
+        UserDTO userDTO = mapper.toDTO(((UserRepository) repository).findUserByChangePasswordToken(uuid));
+        userDTO.setChangePasswordToken(null);
+        userDTO.setPassword(bCryptPasswordEncoder.encode(password));
+        update(userDTO);
+    }
+
 }

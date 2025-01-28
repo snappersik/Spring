@@ -17,37 +17,33 @@ import static com.aptproject.springlibraryproject.library.constants.SecurityCons
 import static com.aptproject.springlibraryproject.library.constants.UserRoleConstants.ADMIN;
 import static com.aptproject.springlibraryproject.library.constants.UserRoleConstants.LIBRARIAN;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;   // После CustomUserDetails
-    private final CustomUserDetailsService customUserDetailsService; // После CustomUserDetails
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CustomUserDetailsService customUserDetailsService;
 
     public WebSecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, CustomUserDetailsService customUserDetailsService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.customUserDetailsService = customUserDetailsService;
-    } // После CustomUserDetails
+    }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception { // является builder'ом
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .cors().disable() // Cross-Origin Resource Sharing - Это механизм браузера, который позволяет определить
-                // список ресурсов, к которым страница может получить доступ.
-                .csrf().disable() // Cross-Site Request Forgery
-                //Настройка http-запросов - кому/куда можно/нельзя
+                .cors().disable() // todo протестировать без cors/csrf
+                .csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(RESOURCES_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(BOOKS_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(USERS_WHITE_LIST.toArray(String[]::new)).permitAll()
-                        .requestMatchers(BOOKS_PERMISSION_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
+                        .requestMatchers(BOOKS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
                         .anyRequest().authenticated() // Все прочие запросы доступны аутентифицированным пользователям
                 )
-                //Настройка для входа в систему
+                // Настраиваем вход в систему
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        //Перенаправляем на главную страницу после успеха
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )
@@ -67,4 +63,5 @@ public class WebSecurityConfig {
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
+
 }

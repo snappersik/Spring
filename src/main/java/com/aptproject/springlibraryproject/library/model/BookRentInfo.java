@@ -1,10 +1,13 @@
 package com.aptproject.springlibraryproject.library.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "book_rent_info")
@@ -26,10 +29,10 @@ public class BookRentInfo extends GenericModel {
     private Book book;
 
     @Column(name = "rent_date", nullable = false)
-    private LocalDate rentDate;
+    private LocalDateTime rentDate;
 
     @Column(name = "return_date", nullable = false)
-    private LocalDate returnDate;
+    private LocalDateTime returnDate;
 
     @Column(name = "rent_period", nullable = false)
     private Integer rentPeriod;

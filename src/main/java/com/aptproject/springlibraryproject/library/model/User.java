@@ -45,6 +45,9 @@ public class User extends GenericModel{
     @Column(name = "address", nullable = false)
     private String address;
 
+    @Column(name = "change_password_token")
+    private String changePasswordToken;
+
     @ManyToOne (cascade = CascadeType.MERGE) // много пользователей могут иметь одну роль
     @JoinColumn(name = "role_id", nullable = false,
             foreignKey = @ForeignKey(name = "USERS_ROLES"))

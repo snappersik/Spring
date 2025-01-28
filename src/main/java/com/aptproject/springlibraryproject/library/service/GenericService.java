@@ -7,6 +7,7 @@ import com.aptproject.springlibraryproject.library.repository.GenericRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -43,6 +44,14 @@ public abstract class GenericService<E extends GenericModel, D extends GenericDT
         return new PageImpl<>(result, pageable, objects.getTotalElements());
     }
 
+
+
+    public Page<D> listAllNoteDeleted(Pageable pageable) {
+        Page<E> preResults = repository.findAllByIsDeletedFalse(pageable);
+        List<D> result = mapper.toDTOs(preResults.getContent());
+        return new PageImpl<>(result, pageable, preResults.getTotalElements());
+    }
+
     public D getOne(final Long id) {
         return mapper.toDTO(repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Данные по заданному id:" + id + " не найдено!")));
@@ -61,4 +70,29 @@ public abstract class GenericService<E extends GenericModel, D extends GenericDT
     public void delete(final Long id) {
         repository.deleteById(id);
     }
+
+    public void deleteSoft(final Long id) {
+        E obj = repository.findById(id).orElseThrow(() -> new NotFoundException("Объект не найден"));
+        markAsDeleted(obj);
+    }
+
+    public void restore (final Long id) {
+        E obj = repository.findById(id).orElseThrow(()-> new NotFoundException("Объект не найден"));
+        unmarkAsDeleted(obj);
+        repository.save(obj);
+    }
+
+    private void markAsDeleted(GenericModel genericModel) {
+        genericModel.setDeleted(true);
+        genericModel.setDeletedWhen(LocalDateTime.now());
+        genericModel.setDeletedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    private void unmarkAsDeleted(GenericModel genericModel) {
+        genericModel.setDeleted(false);
+        genericModel.setDeletedWhen(null);
+        genericModel.setDeletedBy(null);
+
+    }
+
 }

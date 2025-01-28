@@ -1,8 +1,12 @@
 package com.aptproject.springlibraryproject.library.repository;
 
 import com.aptproject.springlibraryproject.library.model.GenericModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+
+import java.util.List;
 
 /**
  * Абстрактный репозиторий
@@ -14,5 +18,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean // не даст создать репозиторий, т.к. он абстрактный. Аналог @MappedSuperclass у GenericModel
 public interface GenericRepository <T extends GenericModel> extends JpaRepository<T, Long> { // Ограничиваем работу
-    // только с моделями, которые наследуются от GenericModel
+
+    Page<T> findAllByIsDeletedFalse(Pageable pageable);
+    List<T> findAllByIsDeletedFalse();
+
 }

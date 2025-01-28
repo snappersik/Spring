@@ -24,5 +24,7 @@ public class UserDTO
     private String phone;
     private String address;
     private RoleDTO role;
+    private String changePasswordToken;
     private List<Long> userBooksRent;
+    private boolean isDeleted;
 }

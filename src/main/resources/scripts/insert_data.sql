@@ -81,5 +81,6 @@ select * from roles;
 select * from authors;
 select * from books;
 select * from books_authors;
+select * from users;
 
 
