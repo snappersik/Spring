@@ -1,7 +1,9 @@
 package com.aptproject.springlibraryproject.library.service;
 
+import com.aptproject.springlibraryproject.library.constants.Errors;
 import com.aptproject.springlibraryproject.library.dto.BookDTO;
 import com.aptproject.springlibraryproject.library.dto.BookSearchDTO;
+import com.aptproject.springlibraryproject.library.exception.MyDeleteException;
 import com.aptproject.springlibraryproject.library.mapper.BookMapper;
 import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.Book;
@@ -52,15 +54,26 @@ public class BookService
 
     }
 
-
-    public BookDTO addAuthor(final Long bookId,
-                             final Long authorId) {
+    public BookDTO addAuthor(final Long bookId, final Long authorId) {
         BookDTO book = getOne(bookId);
-        Author author = authorRepository.findById(authorId).orElseThrow(() -> new NotFoundException("автор не найден"));
+        Author author = authorRepository.findById(authorId).orElseThrow(
+                () -> new NotFoundException("Автор не найден"));
         book.getAuthorIds().add(author.getId());
         update(book);
         return book;
     }
 
+    @Override
+    public void deleteSoft(final Long id) throws MyDeleteException {
+        Book book = repository.findById(id).orElseThrow(
+                () -> new NotFoundException("Книги не найдено"));
+        boolean bookCanBeDeleted = ((BookRepository) repository).isBookCanBeDeleted(id);
+        if (bookCanBeDeleted) {
+            markAsDeleted(book);
+            repository.save(book);
+        } else {
+            throw new MyDeleteException(Errors.Book.BOOK_DELETED_ERROR);
+        }
+    }
 
 }

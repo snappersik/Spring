@@ -44,8 +44,6 @@ public abstract class GenericService<E extends GenericModel, D extends GenericDT
         return new PageImpl<>(result, pageable, objects.getTotalElements());
     }
 
-
-
     public Page<D> listAllNoteDeleted(Pageable pageable) {
         Page<E> preResults = repository.findAllByIsDeletedFalse(pageable);
         List<D> result = mapper.toDTOs(preResults.getContent());

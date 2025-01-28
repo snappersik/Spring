@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en"
+      layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр автора</title>
+</head>
+<body>
+<form layout:fragment="content">
+    <div class="mt-3">
+        <h3 th:text="'Информация об авторе: ' + ${author.getAuthorName()}"></h3>
+        <form class="row g-1">
+            <div class="mb-2 row">
+                <label for="authorName" class="col-sm-2 col-form-label no-border">ФИО:</label>
+                <div class="col-sm-10">
+                    <p th:text="${author.getAuthorName()}" class="form-control-plaintext" id="authorName">
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label for="birthDate" class="col-sm-2 col-form-label">Дата рождения:</label>
+                <div class="col-sm-10">
+                    <p th:text="${author.getBirthDate()}" class="form-control-plaintext" id="birthDate">
+                </div>
+            </div>
+            <div class="mb-2 row">
+                <label for="description" class="col-sm-2 col-form-label">Описание:</label>
+                <div class="col-sm-10">
+                    <p th:text="${author.getDescription()}" class="form-control-plaintext" id="description">
+                </div>
+            </div>
+        </form>
+        <hr class="hr"/>
+        <div class="mt-2">
+            <form method="POST" th:object="${authorSearchForm}" th:action="@{/books/search/books-by-author}">
+                <a sec:authorize="isAuthenticated() && !hasRole('USER')" class="btn btn-primary"
+                   th:href="'/authors/add-book/' + ${author.getId()}">Добавить книгу</a>
+                <input type="hidden" name="authorName"
+                       th:value="${author.getAuthorName()}">
+                <button type="submit" class="btn btn-success">Посмотреть книги</button>
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+            </form>
+        </div>
+    </div>
+</form>
+</body>
+</html>
+

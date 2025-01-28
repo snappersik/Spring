@@ -37,14 +37,6 @@ public class MVCBookController {
         return "books/view-all-books";
     }
 
-    @GetMapping("/{id}") // localhost:8080/books/30
-    public String getOne(@PathVariable Long id,
-                         Model model) {
-        model.addAttribute("book", bookService.getOne(id));
-        return "books/view-book";
-    }
-
-
     @PostMapping("/search")
     public String searchBooks(
             @RequestParam(value = "page", defaultValue = "1") int page,
@@ -69,5 +61,55 @@ public class MVCBookController {
         bookService.create(newBook);
         return "redirect:/books";
     }
+
+    @GetMapping("/{id}")
+    public String getOne(@PathVariable Long id, Model model) {
+        model.addAttribute("book", bookService.getOne(id));
+        return "books/view-book";
+    }
+
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable Long id, Model model) {
+        model.addAttribute("book", bookService.getOne(id));
+        return "books/updateBook";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute("bookForm") BookDTO bookDTO) {
+        bookService.update(bookDTO);
+        return "redirect:/books";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) throws MyDeleteException {
+        bookService.deleteSoft(id);
+        return "redirect:/books";
+    }
+
+    @GetMapping("/restore/{id}")
+    public String restore(@PathVariable Long id) {
+        bookService.restore(id);
+        return "redirect:/books";
+    }
+
+    /**
+     * Метод для поиска книги по ФИО автора (редирект по кнопке "Посмотреть книги" на странице автора).
+     *
+     * @param page текущая страница
+     * @param pageSize количество объектов на странице
+     * @param authorDTO ДТО автора
+     * @param model модель
+     * @return форма со списком всех книг, подходящих под критерии (по ФИО автора)
+     */
+    @PostMapping("/search/books-by-author")
+    public String searchBooks(@RequestParam(value = "page", defaultValue = "1") int page,
+                              @RequestParam(value = "size", defaultValue = "5") int pageSize,
+                              @ModelAttribute("authorSearchForm") AuthorDTO authorDTO,
+                              Model model) {
+        BookSearchDTO bookSearchDTO = new BookSearchDTO();
+        bookSearchDTO.setAuthorName(authorDTO.getAuthorName());
+        return searchBooks(page, pageSize, bookSearchDTO, model);
+    }
+
 
 }

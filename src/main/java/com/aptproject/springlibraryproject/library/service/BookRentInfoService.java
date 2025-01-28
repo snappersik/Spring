@@ -5,11 +5,16 @@ import com.aptproject.springlibraryproject.library.dto.BookDTO;
 import com.aptproject.springlibraryproject.library.dto.BookRentInfoDTO;
 import com.aptproject.springlibraryproject.library.mapper.GenericMapper;
 import com.aptproject.springlibraryproject.library.model.BookRentInfo;
+import com.aptproject.springlibraryproject.library.repository.BookRentInfoRepository;
 import com.aptproject.springlibraryproject.library.repository.GenericRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class BookRentInfoService
@@ -38,6 +43,23 @@ public class BookRentInfoService
 
         return mapper.toDTO(repository.save(mapper.toEntity(rentInfoDTO)));
     }
+
+    public Page<BookRentInfoDTO> listUserRentBooks(final Long id, final Pageable pageRequest) {
+        Page<BookRentInfo> objects = ((BookRentInfoRepository) repository).getBookRentInfoByUserId(id, pageRequest);
+        List<BookRentInfoDTO> results = mapper.toDTOs(objects.getContent());
+        return new PageImpl<>(results, pageRequest, objects.getTotalElements());
+    }
+
+    public void returnBook(final Long id) {
+        BookRentInfoDTO bookRentInfoDTO = getOne(id);
+        bookRentInfoDTO.setReturned(true);
+        bookRentInfoDTO.setReturnDate(LocalDateTime.now());
+        BookDTO bookDTO = bookRentInfoDTO.getBookDTO();
+        bookDTO.setAmount(bookDTO.getAmount() + 1);
+        update(bookRentInfoDTO);
+        bookService.update(bookDTO);
+    }
+
 
 }
 

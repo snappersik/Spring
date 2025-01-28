@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить книгу к автору</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h3 class="mt-3 mb-3" th:text="'Добавить книгу к автору: ' + ${author}"></h3>
+    <form class="needs-validation" novalidate style="max-width: 50vw" method="POST" th:action="@{/authors/add-book}" th:object="${authorBookForm}">
+        <input type="hidden" name="authorId" th:value="${authorId}">
+        <div class="mt-3 row g-2">
+            <div class="col-md">
+                <div class="form-floating">
+                    <!--TODO: Посмотреть в сторону select списка с вводом-->
+                    <select class="form-select" name="bookId" id="bookTitle" required>
+                        <option selected th:value="${null}">Выберете книгу</option>
+                        <option
+                                th:each="book : ${books}"
+                                th:value="${book.getId()}"
+                                th:text="${book.getBookTitle()}">
+                        </option>
+                    </select>
+                    <label for="bookTitle">Название книги</label>
+                    <div class="invalid-feedback">Обязательное поле для заполнения</div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 row g-2">
+            <button type="submit" class="btn btn-primary" onclick="validateForm()">Добавить</button>
+            <button type="button" class="btn btn-secondary" onclick="window.history.back()">Назад</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
