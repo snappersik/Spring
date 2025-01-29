@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -112,7 +113,7 @@ public class MVCAuthorController {
                                 @RequestParam(value = "size", defaultValue = "5") int pageSize,
                                 @ModelAttribute("authorSearchForm") AuthorDTO authorDTO,
                                 Model model) {
-        if (StringUtils.hasText(authorDTO.getAuthorName())) {
+        if (StringUtils.hasText(authorDTO.getAuthorName()) || StringUtils.hasLength(authorDTO.getAuthorName())) {
             PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.ASC, "authorName"));
             model.addAttribute("authors", authorService.searchAuthors(authorDTO.getAuthorName().trim(), pageRequest));
             return "authors/view-all-authors";

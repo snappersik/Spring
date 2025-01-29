@@ -57,7 +57,7 @@ public class BookService
     public BookDTO addAuthor(final Long bookId, final Long authorId) {
         BookDTO book = getOne(bookId);
         Author author = authorRepository.findById(authorId).orElseThrow(
-                () -> new NotFoundException("Автор не найден"));
+                () -> new NotFoundException("автор не найден"));
         book.getAuthorIds().add(author.getId());
         update(book);
         return book;
@@ -66,13 +66,13 @@ public class BookService
     @Override
     public void deleteSoft(final Long id) throws MyDeleteException {
         Book book = repository.findById(id).orElseThrow(
-                () -> new NotFoundException("Книги не найдено"));
+                () -> new NotFoundException("книги не найдено"));
         boolean bookCanBeDeleted = ((BookRepository) repository).isBookCanBeDeleted(id);
         if (bookCanBeDeleted) {
             markAsDeleted(book);
             repository.save(book);
         } else {
-            throw new MyDeleteException(Errors.Book.BOOK_DELETED_ERROR);
+            throw new MyDeleteException(Errors.Books.BOOK_DELETED_ERROR);
         }
     }
 

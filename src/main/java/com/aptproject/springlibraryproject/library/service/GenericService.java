@@ -1,6 +1,7 @@
 package com.aptproject.springlibraryproject.library.service;
 
 import com.aptproject.springlibraryproject.library.dto.GenericDTO;
+import com.aptproject.springlibraryproject.library.exception.MyDeleteException;
 import com.aptproject.springlibraryproject.library.mapper.GenericMapper;
 import com.aptproject.springlibraryproject.library.model.GenericModel;
 import com.aptproject.springlibraryproject.library.repository.GenericRepository;
@@ -44,11 +45,14 @@ public abstract class GenericService<E extends GenericModel, D extends GenericDT
         return new PageImpl<>(result, pageable, objects.getTotalElements());
     }
 
-    public Page<D> listAllNoteDeleted(Pageable pageable) {
+//    SOFT DELETED
+
+    public Page<D> listAllNotDeleted(Pageable pageable) {
         Page<E> preResults = repository.findAllByIsDeletedFalse(pageable);
         List<D> result = mapper.toDTOs(preResults.getContent());
         return new PageImpl<>(result, pageable, preResults.getTotalElements());
     }
+    //    SOFT DELETED
 
     public D getOne(final Long id) {
         return mapper.toDTO(repository.findById(id)
@@ -69,24 +73,27 @@ public abstract class GenericService<E extends GenericModel, D extends GenericDT
         repository.deleteById(id);
     }
 
-    public void deleteSoft(final Long id) {
+    //    SOFT DELETED
+
+    public void deleteSoft(final Long id) throws MyDeleteException {
         E obj = repository.findById(id).orElseThrow(() -> new NotFoundException("Объект не найден"));
         markAsDeleted(obj);
+        repository.save(obj);
     }
 
     public void restore (final Long id) {
         E obj = repository.findById(id).orElseThrow(()-> new NotFoundException("Объект не найден"));
-        unmarkAsDeleted(obj);
+        unMarkAsDeleted(obj);
         repository.save(obj);
     }
 
-    private void markAsDeleted(GenericModel genericModel) {
+    public void markAsDeleted(GenericModel genericModel) {
         genericModel.setDeleted(true);
         genericModel.setDeletedWhen(LocalDateTime.now());
         genericModel.setDeletedBy(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
-    private void unmarkAsDeleted(GenericModel genericModel) {
+    public void unMarkAsDeleted(GenericModel genericModel) {
         genericModel.setDeleted(false);
         genericModel.setDeletedWhen(null);
         genericModel.setDeletedBy(null);

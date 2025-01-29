@@ -40,11 +40,13 @@ public class AuthorService extends GenericService<Author, AuthorDTO> {
         return new PageImpl<>(result, pageable, authors.getTotalElements());
     }
 
+//    SOFT DELETED
+
     @Override
     public void deleteSoft(Long objectId) throws MyDeleteException {
         Author author = repository.findById(objectId).orElseThrow(
                 () -> new NotFoundException("Автора с заданным id=" + objectId + " не существует."));
-        boolean authorCanBeDeleted = ((AuthorRepository) repository).checkAuthorForDeletion(objectId);
+        boolean authorCanBeDeleted = ((AuthorRepository)repository).checkAuthorForDeletion(objectId);
         if (authorCanBeDeleted) {
             markAsDeleted(author);
             List<Book> books = author.getBooks();
@@ -53,7 +55,7 @@ public class AuthorService extends GenericService<Author, AuthorDTO> {
             }
             ((AuthorRepository) repository).save(author);
         } else {
-            throw new MyDeleteException(Errors.Author.AUTHOR_DELETED_ERROR);
+            throw new MyDeleteException(Errors.Authors.AUTHOR_DELETED_ERROR);
         }
     }
 
@@ -67,4 +69,5 @@ public class AuthorService extends GenericService<Author, AuthorDTO> {
         }
         repository.save(author);
     }
+
 }

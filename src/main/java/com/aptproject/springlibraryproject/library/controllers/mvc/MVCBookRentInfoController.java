@@ -44,7 +44,8 @@ public class MVCBookRentInfoController {
 
     @GetMapping("/return-book/{id}")
     public String returnBook(@PathVariable Long id) {
-        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
         bookRentInfoService.returnBook(id);
         return "redirect:/rent/user-books/" + customUserDetails.getUserId();
     }

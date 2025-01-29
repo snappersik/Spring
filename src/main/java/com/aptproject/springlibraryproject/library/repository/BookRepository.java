@@ -13,12 +13,12 @@ public interface BookRepository extends GenericRepository<Book> {
     @Query(nativeQuery = true, value = """
         select distinct b.*
         from books b
-        left join books_authors ba on b.id = ba.book_id
-        left join authors a on a.id = ba.author_id
+                left join books_authors ba on b.id = ba.book_id
+                left join authors a on a.id = ba.author_id
         where b.title ilike '%' || coalesce(:title, '%') || '%'
-        and cast(b.genre as char) like coalesce(:genre, '%')
-        and coalesce(a.name, '%') ilike '%' || coalesce(:name, '%') || '%'
-        and b.is_deleted = false
+            and cast(b.genre as char) like coalesce(:genre, '%')
+            and coalesce(a.name, '%') ilike '%' || coalesce(:name, '%') || '%'
+            and b.is_deleted = false
     """)
     Page<Book> searchBooks(
             @Param("title") String bookTitle,
@@ -32,6 +32,6 @@ public interface BookRepository extends GenericRepository<Book> {
         from Book b join BookRentInfo bri on b.id = bri.book.id
         where b.id = :id and bri.returned = false
     """)
-    boolean isBookCanBeDeleted(@Param("id") final Long id);
+    boolean isBookCanBeDeleted(final Long id);
 }
 

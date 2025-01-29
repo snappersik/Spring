@@ -19,5 +19,5 @@ public interface AuthorRepository extends GenericRepository<Author> {
         where a.id = :authorId
         and bri.returned = false
         """)
-    boolean checkAuthorForDeletion(@Param("authorId") final Long authorId);
+    boolean checkAuthorForDeletion(final Long authorId);
 }

@@ -23,11 +23,11 @@ public class AuthorController
         super(authorService);
     }
 
-    @Operation(description = "Добавить книгу к автору")
-    @RequestMapping(value = "/addBook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AuthorDTO> addBook(@RequestParam(value = "bookId") Long bookId,
-                                             @RequestParam(value = "authorId") Long authorId) {
-        return ResponseEntity.status(HttpStatus.OK).body(((AuthorService) service).addBook(bookId, authorId));
-    }
+//    @Operation(description = "Добавить книгу к автору")
+//    @RequestMapping(value = "/addBook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<AuthorDTO> addBook(@RequestParam(value = "bookId") Long bookId,
+//                                             @RequestParam(value = "authorId") Long authorId) {
+//        return ResponseEntity.status(HttpStatus.OK).body(((AuthorService) service).addBook(bookId, authorId));
+//    }
 
 }

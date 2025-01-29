@@ -1,7 +1,9 @@
 package com.aptproject.springlibraryproject.library.controllers.mvc;
 
+import com.aptproject.springlibraryproject.library.dto.AuthorDTO;
 import com.aptproject.springlibraryproject.library.dto.BookDTO;
 import com.aptproject.springlibraryproject.library.dto.BookSearchDTO;
+import com.aptproject.springlibraryproject.library.exception.MyDeleteException;
 import com.aptproject.springlibraryproject.library.service.BookService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -74,7 +76,7 @@ public class MVCBookController {
         return "books/updateBook";
     }
 
-    @PostMapping("/update")
+    @PostMapping
     public String update(@ModelAttribute("bookForm") BookDTO bookDTO) {
         bookService.update(bookDTO);
         return "redirect:/books";
@@ -95,12 +97,13 @@ public class MVCBookController {
     /**
      * Метод для поиска книги по ФИО автора (редирект по кнопке "Посмотреть книги" на странице автора).
      *
-     * @param page текущая страница
-     * @param pageSize количество объектов на странице
-     * @param authorDTO ДТО автора
-     * @param model модель
-     * @return форма со списком всех книг, подходящих под критерии (по ФИО автора)
+     * @param page      - текущая страница
+     * @param pageSize  - количество объектов на странице
+     * @param authorDTO - ДТО автора
+     * @param model     - модель
+     * @return форма со списком всех книг, подходящих под критерии (по фио автора)
      */
+
     @PostMapping("/search/books-by-author")
     public String searchBooks(@RequestParam(value = "page", defaultValue = "1") int page,
                               @RequestParam(value = "size", defaultValue = "5") int pageSize,
@@ -110,6 +113,5 @@ public class MVCBookController {
         bookSearchDTO.setAuthorName(authorDTO.getAuthorName());
         return searchBooks(page, pageSize, bookSearchDTO, model);
     }
-
 
 }
