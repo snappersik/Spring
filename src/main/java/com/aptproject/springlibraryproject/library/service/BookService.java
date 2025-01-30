@@ -9,12 +9,16 @@ import com.aptproject.springlibraryproject.library.model.Author;
 import com.aptproject.springlibraryproject.library.model.Book;
 import com.aptproject.springlibraryproject.library.repository.AuthorRepository;
 import com.aptproject.springlibraryproject.library.repository.BookRepository;
+import com.aptproject.springlibraryproject.utils.FileHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,6 +31,14 @@ public class BookService
                           AuthorRepository authorRepository) {
         super(repository, mapper);
         this.authorRepository = authorRepository;
+    }
+
+    public BookDTO create(final BookDTO newBook, MultipartFile file) {
+        String fileName = FileHelper.createFile(file);
+        newBook.setOnlineCopyPath(fileName);
+        newBook.setCreatedWhen(LocalDateTime.now());
+        newBook.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        return mapper.toDTO(repository.save(mapper.toEntity(newBook)));
     }
 
     public Page<BookDTO> getAllBooks(Pageable pageable) {

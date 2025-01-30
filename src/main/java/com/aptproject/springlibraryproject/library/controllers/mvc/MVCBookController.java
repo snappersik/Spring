@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -58,11 +59,20 @@ public class MVCBookController {
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute("bookForm") BookDTO newBook) {
+    public String create(@ModelAttribute("bookForm") BookDTO newBook,
+                         @RequestParam("onlineCopy") MultipartFile file) {
         log.info(newBook.toString());
-        bookService.create(newBook);
+
+        if (file != null && file.getSize() > 0) {
+            log.info(file.getName());
+            bookService.create(newBook, file);
+        } else {
+            bookService.create(newBook);
+        }
+
         return "redirect:/books";
     }
+
 
     @GetMapping("/{id}")
     public String getOne(@PathVariable Long id, Model model) {
