@@ -6,14 +6,23 @@ import com.aptproject.springlibraryproject.library.dto.BookSearchDTO;
 import com.aptproject.springlibraryproject.library.exception.MyDeleteException;
 import com.aptproject.springlibraryproject.library.service.BookService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Slf4j
@@ -123,5 +132,28 @@ public class MVCBookController {
         bookSearchDTO.setAuthorName(authorDTO.getAuthorName());
         return searchBooks(page, pageSize, bookSearchDTO, model);
     }
+
+    @GetMapping(value = "/download", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    public ResponseEntity<Resource> downloadBook(@RequestParam(value = "bookId") Long bookId) throws IOException {
+        BookDTO bookDTO = bookService.getOne(bookId);
+        Path path = Paths.get(bookDTO.getOnlineCopyPath());
+        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+
+        return ResponseEntity.ok()
+                .headers(createHeaders(path.getFileName().toString()))
+                .contentLength(path.toFile().length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
+    }
+
+    private HttpHeaders createHeaders(final String name) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + name);
+        headers.add("Cache-Control", "no-cache, no-store");
+        headers.add("Expires", "0");
+        return headers;
+    }
+
 
 }
