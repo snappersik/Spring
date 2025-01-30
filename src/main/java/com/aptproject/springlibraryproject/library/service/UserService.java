@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
+
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -56,27 +58,34 @@ public class UserService
     }
 
     public void sendChangePasswordEmail(final UserDTO userDTO) {
-        UUID uuid = UUID.randomUUID(); // генерация токена
-        log.info("Токен: {}", uuid);
-        userDTO.setChangePasswordToken(String.valueOf(uuid));
+        // Переписали для 11-й лекции (из-за cron)
+        UUID uuid = UUID.randomUUID();
+        log.info("Generated Token: {}", uuid);
+
+        userDTO.setChangePasswordToken(uuid.toString());
         update(userDTO);
 
         SimpleMailMessage mailMessage = MailUtils.createMailMessage(
                 userDTO.getEmail(),
-                "spring.project.42@mail.ru",
                 MailConstants.MAIL_SUBJECT_FOR_REMEMBER_PASSWORD,
                 MailConstants.MAIL_MESSAGE_FOR_REMEMBER_PASSWORD + uuid
         );
 
         javaMailSender.send(mailMessage);
-
     }
 
-    public void changePassword(String uuid, String password){
+    public void changePassword(String uuid, String password) {
         UserDTO userDTO = mapper.toDTO(((UserRepository) repository).findUserByChangePasswordToken(uuid));
+
         userDTO.setChangePasswordToken(null);
         userDTO.setPassword(bCryptPasswordEncoder.encode(password));
+
         update(userDTO);
     }
+
+    public List<String> getUserEmailsWithDelayedRentDate() {
+        return ((UserRepository) repository).getDelayedEmails();
+    }
+
 
 }

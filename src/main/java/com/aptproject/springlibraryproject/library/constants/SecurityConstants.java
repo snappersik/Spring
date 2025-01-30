@@ -26,7 +26,7 @@ public interface SecurityConstants {
     List<String> BOOKS_PERMISSIONS_LIST = List.of("/books/add",
             "/books/update",
             "/books/delete",
-            "/books/download/{bookId}");
+            "/books/download/{bookd}");
 
     List<String> AUTHORS_PERMISSIONS_LIST = List.of("/authors/add",
             "authors/update",
