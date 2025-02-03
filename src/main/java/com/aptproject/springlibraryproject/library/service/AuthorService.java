@@ -20,11 +20,9 @@ import java.util.List;
 @Service
 public class AuthorService extends GenericService<Author, AuthorDTO> {
 
-    private final BookRepository bookRepository;
 
     public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper, BookRepository bookRepository) {
         super(authorRepository, authorMapper);
-        this.bookRepository = bookRepository;
     }
 
     public AuthorDTO addBook(final AddBookDTO addBookDTO) {

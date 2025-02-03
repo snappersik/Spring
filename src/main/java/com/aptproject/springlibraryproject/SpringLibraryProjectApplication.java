@@ -30,4 +30,3 @@ public class SpringLibraryProjectApplication implements CommandLineRunner {
     }
 
 }
-
