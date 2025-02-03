@@ -21,7 +21,8 @@ import java.util.List;
 public class AuthorService extends GenericService<Author, AuthorDTO> {
 
 
-    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper, BookRepository bookRepository) {
+
+    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper) {
         super(authorRepository, authorMapper);
     }
 

@@ -44,7 +44,7 @@ public class MVCUserController {
             return "registration";
         }
         userService.create(userDTO);
-        return "redirect:login";
+        return "redirect:/login";
     }
 
     @GetMapping("/remember-password")

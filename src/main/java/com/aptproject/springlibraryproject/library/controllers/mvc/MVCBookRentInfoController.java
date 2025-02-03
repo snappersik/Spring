@@ -56,8 +56,11 @@ public class MVCBookRentInfoController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "5") int pageSize,
             @PathVariable Long id, Model model) {
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.
+                getContext().getAuthentication().getPrincipal();
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
-        Page<BookRentInfoDTO> bookRentInfoDTOPage = bookRentInfoService.listAll(pageRequest);
+        Page<BookRentInfoDTO> bookRentInfoDTOPage = bookRentInfoService
+                .listUserRentBooks(Long.valueOf(customUserDetails.getUserId()), pageRequest);
         model.addAttribute("rentBooks", bookRentInfoDTOPage);
         return "/userBooks/view-all-users-books";
     }
