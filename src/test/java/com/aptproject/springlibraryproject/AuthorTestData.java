@@ -1,4 +1,4 @@
-package com.aptproject.springlibraryproject.service;
+package com.aptproject.springlibraryproject;
 
 import com.aptproject.springlibraryproject.library.dto.AuthorDTO;
 import com.aptproject.springlibraryproject.library.model.Author;

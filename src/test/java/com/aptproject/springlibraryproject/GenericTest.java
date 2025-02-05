@@ -1,4 +1,4 @@
-package com.aptproject.springlibraryproject.service;
+package com.aptproject.springlibraryproject;
 
 import com.aptproject.springlibraryproject.library.dto.GenericDTO;
 import com.aptproject.springlibraryproject.library.exception.MyDeleteException;
