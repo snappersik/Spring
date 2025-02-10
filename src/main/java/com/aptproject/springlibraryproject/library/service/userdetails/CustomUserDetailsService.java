@@ -3,10 +3,8 @@ package com.aptproject.springlibraryproject.library.service.userdetails;
 import com.aptproject.springlibraryproject.library.constants.UserRoleConstants;
 import com.aptproject.springlibraryproject.library.model.User;
 import com.aptproject.springlibraryproject.library.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthoritiesContainer;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,13 +17,14 @@ import java.util.List;
 import static com.aptproject.springlibraryproject.library.constants.UserRoleConstants.ADMIN;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService
+        implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    @Value("${spring.security.user.name}")
+    @Value("${spring.security.user.name}") // добавлена строка в application.properties
     private String adminUserName;
-    @Value("${spring.security.user.password}")
+    @Value("${spring.security.user.password}") // добавлена строка в application.properties
     private String adminPassword;
 
     public CustomUserDetailsService(UserRepository userRepository) {
@@ -35,15 +34,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (username.equals(adminUserName)) {
-            return  new CustomUserDetails(null, username, adminPassword, List.of(new SimpleGrantedAuthority(
-                    "ROLE_" + ADMIN)));
+            return new CustomUserDetails(null, username, adminPassword, List.of(new SimpleGrantedAuthority("ROLE_" +
+                    ADMIN)));
         } else {
-            User user = userRepository.findUserByLogin(username);
+            User user = userRepository.findUserByLogin(username); // создать метод в UserRepository
             List<GrantedAuthority> authorities = new ArrayList<>();
 
+            //ROLE_USER, ROLE_LIBRARIAN
             authorities.add(new SimpleGrantedAuthority(user.getRole().getId() == 1L
-                ? "ROLE_" + UserRoleConstants.USER
-                : "ROLE_" + UserRoleConstants.LIBRARIAN));
+                    ? "ROLE_" + UserRolesConstants.USER
+                    : "ROLE_" + UserRolesConstants.LIBRARIAN));
 
             return new CustomUserDetails(user.getId().intValue(), username, user.getPassword(), authorities);
         }
