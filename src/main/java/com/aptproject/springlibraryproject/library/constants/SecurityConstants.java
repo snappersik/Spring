@@ -7,6 +7,7 @@ public interface SecurityConstants {
             "/static/**",
             "/js/**",
             "/css/**",
+            "/images/**",
             "/",
             "/swagger-ui/**",
             "/webjars/bootstrap/5.3.3/**",

@@ -9,37 +9,21 @@
     <link rel="stylesheet" href="/css/library.css">
 </head>
 <style>
-    footer {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
-    .container {
-        margin-bottom: 50px;
-    }
-    .btn-primary {
-        color: black;
-        background-color: #ffffff;
-        border-color: transparent;
-    }
-    .btn-primary:hover {
-        color: white;
-        background-color: #fdbdba;
-        border-color: white;
-    }
 </style>
 <body>
+<!--header -->
+<div th:replace="~{layoutFragments/header :: header}"></div>
+
+<!--content -->
 <main class="content-wrapper">
-    <!--header -->
-    <div th:replace="~{header :: header}"></div>
-    <!--content -->
     <div class="container">
         <div layout:fragment="content">
-            <h1>Статический контент будет отображаться здесь!</h1>
+            <div th:replace="~{layoutFragments/carousel :: carousel}"></div>
         </div>
     </div>
+
     <!--footer -->
-    <div th:replace="~{footer :: footer}"></div>
+    <div th:replace="~{layoutFragments/footer :: footer}"></div>
 </main>
 <script src="/js/form_validation.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

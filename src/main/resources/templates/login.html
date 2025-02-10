@@ -1,48 +1,60 @@
+<!--Страница авторизации-->
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="https://www.thymeleaf.org"
       layout:decorate="~{layout}"
       lang="en">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edgo" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Вход в Онпайн Библиотеку</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Вход в Онлайн Библиотеку</title>
 </head>
-
 <body>
-<div layout:fragment="content" class="mt-5">
+<div layout:fragment="content" class="container-fluid mt-5">
     <form method="POST" th:action="@{/login}">
+        <div class="mb-3">
+            <div class="mb-3 d-flex justify-content-center align-items-center">
+                <img src="/images/logo_login.svg" alt="logo" width="100" height="86">
+            </div>
+            <h1 class="h4 form-floating col-md-4 offset-md-4 m-auto text-center">Вход в онлайн библиотеку</h1>
+        </div>
         <div th:if="${param.error}">
             <div class="alert alert-danger">
-                <p style="float: none">Неверный Логин/пароль</p>
+                <p style="float: none">Неверный логин/пароль</p>
             </div>
         </div>
-        <div class="form-group offset-md-4 m-auto">
-            <div class="form-group offset-md-4 m-auto mb-4">
-                <p class="h2" style="text-align:center">Bход в онлайн библиотекy</p>
-            </div>
-            <div class="form-group col-md-2 offset-md-4 m-auto mb-3">
-                <input name="username" type="text" class="form-control" id="exampleInputUsername"
-                       placeholder="Имя пользователя" aria-describedby="usernameHelp" />
-                <label for="exampleInputUsername"></label>
-                <small id="usernameHelp" class="form-text text-muted">введите имя пользователя</small>
+        <div class="mb-3">
+            <div class="form-floating col-md-4 offset-md-4 m-auto">
+                <input name="username" type="text" class="form-control" id="floatingInput"
+                       placeholder="Имя пользователя">
+                <label for="floatingInput">Введите имя пользователя</label>
             </div>
         </div>
-        <div class="form-group col-md-2 offset-md-4 m-auto">
-            <input name="password" type="password" class="form-control" id="exampleInputPassword"
-                   placeholder="Пароль">
-            <label for="exampleInputPassword"></label>
-            <small id="passwordHelp" class="form-text text-muted">Введите пароль</small>
-        </div>
-        <div class="form-group mt-3 d-flex flex-column align-items-center">
-            <button type="submit" class="btn btn-success w-25">Войти</button>
-            <div class="mt-1 d-flex gap-4">
-                <a class="text-link" href="/users/registration">Зарегистрироваться</a>
-                <a class="text-link" href="/users/remember-password">Забыли пароль?</a>
+        <div class="mb-3">
+            <div class="form-floating col-md-4 offset-md-4 m-auto">
+                <input name="password" type="password" class="form-control" id="floatingPassword"
+                       placeholder="Пароль">
+                <label for="floatingPassword">Введите пароль</label>
             </div>
+        </div>
+        <div class="mb-3">
+            <!--<div class="form-group col-md-4 offset-md-4 m-auto">-->
+            <button type="submit" class="btn btn-info col-md-4 offset-md-4">Войти</button>
+            <!--</div>-->
+        </div>
+
+        <div class="mb-5">
+            <!--<div class="col-md-4 offset-md-4">-->
+            <div class="btn-group col-md-4 offset-md-4" role="group" aria-label="Basic example">
+                <a class="btn btn-link" href="/users/registration">Зарегистрироваться</a>
+                <a class="btn btn-link" href="/users/remember-password">Забыли пароль?</a>
+            </div>
+<!--        </div>-->
         </div>
     </form>
+
 </div>
+
 </body>
 </html>
