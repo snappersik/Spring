@@ -32,12 +32,14 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .cors().disable() // todo протестировать без cors/csrf
+                .cors().disable()
                 .csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(RESOURCES_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(BOOKS_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(USERS_WHITE_LIST.toArray(String[]::new)).permitAll()
+                        .requestMatchers(AUTHORS_WHITE_LIST.toArray(String[]::new)).permitAll()
+                        .requestMatchers(AUTHORS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
                         .requestMatchers(BOOKS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
                         .anyRequest().authenticated() // Все прочие запросы доступны аутентифицированным пользователям
                 )

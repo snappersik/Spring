@@ -41,7 +41,7 @@ public class MVCAuthorControllerTest extends CommonTestMVC {
     @Override
     @Test
     @DisplayName("Просмотр всех авторов через MVC контроллер")
-    @Order(8)
+    @Order(0)
     @WithAnonymousUser
     protected void listAll() throws Exception {
         log.info("Тест просмотра авторов MVC начат!");
@@ -55,14 +55,11 @@ public class MVCAuthorControllerTest extends CommonTestMVC {
                 .andExpect(model().attributeExists("authors"))
                 .andReturn();
     }
-     /*
-       Метод, тестирующий создание автора через MVC-контроллер.
-       Авторизуемся под пользователем admin (можно выбрать любого).
-       Создаем шаблон данных и вызываем MVC-контроллер с соответствующим маппингом и методом.
-       FlashAttr используется, чтобы передать ModelAttribute в метод контроллера.
-       Ожидаем, что будет статус redirect (как у нас в контроллере) при успешном создании.
-     */
-
+    // Метод, тестирующий создание автора через MVC-контроллер.
+    // Авторизуемся под пользователем admin (можно выбрать любого).
+    // Создаем шаблон данных и вызываем MVC-контроллер с соответствующим маппингом и методом.
+    // FlashAttr используется, чтобы передать ModelAttribute в метод контроллера.
+    // Ожидаем, что будет статус redirect (как у нас в контроллере) при успешном создании.
     @Override
     @Test
     @Order(1)
@@ -71,16 +68,16 @@ public class MVCAuthorControllerTest extends CommonTestMVC {
     protected void createObject() throws Exception {
         log.info("Тест по созданию автора через MVC начат");
         mvc.perform(post("/authors/add")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .flashAttr("authorForm", authorDTO)
-                        .accept(MediaType.APPLICATION_JSON)
-//                        .with(csrf())
-                        )
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .flashAttr("authorForm", authorDTO)
+                                .accept(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/authors"))
                 .andExpect(redirectedUrl("/authors"));
         log.info("Тест по созданию автора через MVC закончен!");
     }
+
 
     @Override
     @Test

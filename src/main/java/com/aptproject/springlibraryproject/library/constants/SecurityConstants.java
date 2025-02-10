@@ -14,11 +14,12 @@ public interface SecurityConstants {
             "/v3/api-docs/**");
 
     List<String> BOOKS_WHITE_LIST = List.of(
+            "/books",
             "/books/search",
             "/books/{id}",
             "/books/{id}");
 
-    List<String> AUTHORS_WHITE_LIST =List.of(
+    List<String> AUTHORS_WHITE_LIST = List.of(
             "/authors",
             "/authors/search",
             "/authors/search/books-by-authors",
