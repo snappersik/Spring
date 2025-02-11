@@ -5,8 +5,9 @@
 //import org.springframework.web.bind.annotation.ExceptionHandler;
 //import org.springframework.web.bind.annotation.ResponseStatus;
 //import org.springframework.web.bind.annotation.RestControllerAdvice;
+//import org.webjars.NotFoundException;
 //
-//import org.springframework.security.core.AuthenticationException;
+//import javax.naming.AuthenticationException;
 //import java.nio.file.AccessDeniedException;
 //
 //@RestControllerAdvice
@@ -15,7 +16,7 @@
 //    @ExceptionHandler(MyDeleteException.class)
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    public ErrorDTO handleMyDeleteException(MyDeleteException ex) {
-//        return proceedFieldsErrors(ex, Errors.REST.DELETE_ERROR_MESSAGE, ex.getMessage());
+//        return proceedFieldsErrors(ex, Errors.REST.DELETED_ERROR_MESSAGE, ex.getMessage());
 //    }
 //
 //    @ExceptionHandler(AuthenticationException.class)
@@ -27,7 +28,7 @@
 //    @ExceptionHandler(AccessDeniedException.class)
 //    @ResponseStatus(HttpStatus.FORBIDDEN)
 //    public ErrorDTO handleAccessDenied(AccessDeniedException ex) {
-//        return proceedFieldsErrors(ex, Errors.REST.ACCESS_DENIED_ERROR_MESSAGE, ex.getMessage());
+//        return proceedFieldsErrors(ex, Errors.REST.ACCESS_ERROR_MESSAGE, ex.getMessage());
 //    }
 //
 //    @ExceptionHandler(NotFoundException.class)
