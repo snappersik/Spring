@@ -37,7 +37,7 @@ public class CustomUserDetailsService
             return new CustomUserDetails(null, username, adminPassword, List.of(new SimpleGrantedAuthority("ROLE_" +
                     ADMIN)));
         } else {
-            User user = userRepository.findUserByLogin(username); // создать метод в UserRepository
+            User user = userRepository.findUserByLoginAndIsDeletedFalse(username); // создать метод в UserRepository
             List<GrantedAuthority> authorities = new ArrayList<>();
 
             //ROLE_USER, ROLE_LIBRARIAN

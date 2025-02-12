@@ -8,6 +8,9 @@ import com.aptproject.springlibraryproject.library.model.User;
 import com.aptproject.springlibraryproject.library.repository.GenericRepository;
 import com.aptproject.springlibraryproject.library.repository.UserRepository;
 import com.aptproject.springlibraryproject.utils.MailUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,6 +46,14 @@ public class UserService
         newObject.setCreatedBy("REGISTRATION FORM");
         newObject.setCreatedWhen(LocalDateTime.now());
         return mapper.toDTO(repository.save(mapper.toEntity(newObject)));
+    }
+
+    public UserDTO createLibrarian(UserDTO newObject) {
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setId(2L);
+        newObject.setRole(roleDTO);
+        newObject.setCreatedBy("LIBRARIAN CREATION FORM");
+        return create(newObject);
     }
 
     public UserDTO getUserByLogin(final String login) {
@@ -87,5 +98,15 @@ public class UserService
         return ((UserRepository) repository).getDelayedEmails();
     }
 
+    public Page<UserDTO> findUsers(UserDTO userDTO, Pageable pageable) {
+        Page<User> users = ((UserRepository) repository).searchUsers(
+                userDTO.getFirstName(),
+                userDTO.getLastName(),
+                userDTO.getLogin(),
+                pageable
+        );
+        List<UserDTO> result = mapper.toDTOs(users.getContent());
+        return new PageImpl<>(result, pageable, users.getTotalElements());
+    }
 
 }
