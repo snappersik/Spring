@@ -14,8 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import java.util.List;
 
 import static com.aptproject.springlibraryproject.library.constants.SecurityConstants.*;
-import static com.aptproject.springlibraryproject.library.constants.UserRoleConstants.ADMIN;
-import static com.aptproject.springlibraryproject.library.constants.UserRoleConstants.LIBRARIAN;
+import static com.aptproject.springlibraryproject.library.constants.UserRoleConstants.*;
 
 @Configuration
 @EnableWebSecurity
@@ -41,6 +40,7 @@ public class WebSecurityConfig {
                         .requestMatchers(AUTHORS_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(AUTHORS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
                         .requestMatchers(BOOKS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
+                        .requestMatchers(USER_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, USER, LIBRARIAN)
                         .anyRequest().authenticated() // Все прочие запросы доступны аутентифицированным пользователям
                 )
                 // Настраиваем вход в систему

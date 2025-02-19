@@ -44,9 +44,12 @@ public interface SecurityConstants {
             "/login",
             "/users/registration",
             "/users/remember-password",
-            "/users/change-password");
+            "/users/change-password",
+            "/users/profile/**",
+            "/rent/user-books/**"
+    );
 
-    List<String> USER_PERMISSION_LIST = List.of("/rent/book/*");
+    List<String> USER_PERMISSIONS_LIST = List.of("/rent/book/*");
     List<String> USERS_REST_WHITE_LIST = List.of("/users/auth");
 
 }

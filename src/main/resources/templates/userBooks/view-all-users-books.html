@@ -57,20 +57,22 @@
         <ul class="pagination justify-content-center font-weight-bold">
             <li class="page-item" th:classappend="${rentBooks.number eq 0} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{/rentBooks?page={id}(id=${rentBooks.number lt 2 ? 1 : rentBooks.number})}"
+                   th:href="@{/rent/user-books/{id}(id=${userId}, page=${rentBooks.number})}"
                    aria-label="Previous" title="Previous Page" data-toggle="tooltip">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="page-item"
-                th:each="i : ${#numbers.sequence(1, rentBooks.totalPages, 1)}"
-                th:classappend="${i eq rentBooks.number + 1} ? 'active'">
-                <a class="page-link" th:href="@{/rentBooks?page={id}(id=${i})}" th:text="${i}"
-                   th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+
+            <li class="page-item" th:each="i : ${#numbers.sequence(1, rentBooks.totalPages)}">
+                <a class="page-link"
+                   th:href="@{/rent/user-books/{id}(id=${userId}, page=${i})}"
+                   th:text="${i}"
+                   th:classappend="${i == rentBooks.number + 1} ? 'active'"></a>
             </li>
+
             <li class="page-item" th:classappend="${rentBooks.number eq rentBooks.totalPages - 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{/rentBooks?page={id}(id=${rentBooks.number + 2})}"
+                   th:href="@{/rent/user-books/{id}(id=${userId}, page=${rentBooks.number + 2})}"
                    aria-label="Next" title="Next Page" data-toggle="tooltip">
                     <span aria-hidden="true">&raquo;</span>
                 </a>

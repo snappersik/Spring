@@ -62,6 +62,7 @@ public class MVCBookRentInfoController {
         Page<BookRentInfoDTO> bookRentInfoDTOPage = bookRentInfoService
                 .listUserRentBooks(Long.valueOf(customUserDetails.getUserId()), pageRequest);
         model.addAttribute("rentBooks", bookRentInfoDTOPage);
+        model.addAttribute("userId", id);
         return "/userBooks/view-all-users-books";
     }
 

@@ -10,7 +10,7 @@ public interface Errors {
 
     }
     class Users {
-        public static final String USER_DELETED_ERROR = "У вас нет прав просматривать информацию пользователей";
+        public static final String USER_FORBIDDEN_ERROR = "У вас нет прав просматривать информацию пользователей";
 
     }
 

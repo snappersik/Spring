@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  deploy:
+    container_name: library-app
+    build:
+      context: src
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5332/local_db2
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=12345
+
+    networks:
+      java17-network:
+        aliases:
+          - javaLibraryApp
+networks:
+  java17-network:
+    name: 'our_java_library_network'

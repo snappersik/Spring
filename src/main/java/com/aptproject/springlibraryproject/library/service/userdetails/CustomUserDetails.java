@@ -1,6 +1,5 @@
 package com.aptproject.springlibraryproject.library.service.userdetails;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,8 @@ import java.util.Map;
 
 @Builder
 @AllArgsConstructor
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetails
+        implements UserDetails {
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
     private final String username;
@@ -37,7 +37,6 @@ public class CustomUserDetails implements UserDetails {
         this.accountNotLocked = true;
         this.credentialsNonExpired = true;
         this.enabled = true;
-
     }
 
     @Override
@@ -78,6 +77,15 @@ public class CustomUserDetails implements UserDetails {
     public Integer getUserId() {
         return id;
     }
+
+    //    @Override
+//    public String toString() {
+//        return "{\"user_id\":\"" + id + "\"," +
+//                "\"username\":\"" + username + "\"," +
+//                "\"user_role\":\"" + authorities + "\"," +
+//                "\"password\":\"" + password + "\"}";    }
+
+
     @Override
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
