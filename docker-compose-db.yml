@@ -1,10 +1,10 @@
 version: "3.9"
 services:
   postgres:
-    container_name: localPostgresSQLDB2
+    container_name: localPostgresSQLDB
     image: postgres
     environment:
-      POSTGRES_DB: "local_db2"
+      POSTGRES_DB: "local_db"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "12345"
     ports:
