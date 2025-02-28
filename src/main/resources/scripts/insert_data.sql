@@ -76,7 +76,7 @@ INSERT INTO public.books_authors (book_id, author_id)
 VALUES (7, 7);
 
 
-INSERT INTO users (id, login, password, email, birth_date, first_name, last_name, phone, address, role_id)
+INSERT INTO users (id, login, password, email, birth_date, first_name, last_name, middle_name, phone, address, role_id)
 VALUES (1, 'user', '$2a$10$/K4nznrj3/UspoqUFUuEqeKxzm85y3J.PXXgzyKJVMEbj1F8QaE/2', 'user@user.ru', '2000-01-01', 'Иван', 'Иванов', 'Иванович', '1234567890', 'Москва', 1);
 
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns:th="http://www.w3.org/1999/xhtml">>
+<head>
+    <meta charset="UTF-8">
+    <title>Обратная связь</title>
+</head>
+<body>
+<div layout:fragment="content" class="content-wrapper d-flex justify-content-center mt-5">
+    <form class="contact-form" th:action="@{/contact}" method="POST" th:object="${contactForm}">
+        <h3>Связаться с нами</h3>
+        <input type="text" name="name" id="name" placeholder="Ваше имя" required>
+        <input type="email" name="fromEmail" id="fromEmail" placeholder="Ваш email" required>
+        <input type="text" name="phone" id="phone" placeholder="Ваш телефон" required>
+        <textarea name="body" id="body" rows="4" placeholder="Чем мы можем Вам помочь?" required></textarea>
+        <button type="submit">Отправить</button>
+    </form>
+</div>
+</body>
+</html>

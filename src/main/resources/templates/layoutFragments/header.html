@@ -21,6 +21,9 @@
                             <a class="nav-link active" aria-current="page"
                                th:href="'/rent/user-books/' + ${#authentication.getPrincipal().getUserId()}">Мои книги</a>
                         </li>
+                        <li class="nav-link">
+                            <a class="nav-link active" aria-current="page" href="/contact">Связаться с нами</a>
+                        </li>
                         <li sec:authorize="isAuthenticated() && (hasRole('ADMIN') || hasRole('LIBRARIAN'))" class="nav-link">
                             <a class="nav-link active" aria-current="page" href="/users/list">Пользователи</a>
                         </li>

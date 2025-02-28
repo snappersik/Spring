@@ -58,7 +58,7 @@ public class MVCUserController {
     }
 
     @PostMapping("/add-librarian")
-    public String addLibrarian(@ModelAttribute("userForm")UserDTO userDTO, BindingResult bindingResult) {
+    public String addLibrarianPage(@ModelAttribute("userForm") UserDTO userDTO, BindingResult bindingResult) {
         if (userDTO.getLogin().equalsIgnoreCase(ADMIN) || userService.getUserByLogin(userDTO.getLogin()) != null) {
             bindingResult.rejectValue("login", "error.login", "Такой логин уже существует");
             return "registration";
@@ -95,7 +95,7 @@ public class MVCUserController {
     public String rememberPassword(@ModelAttribute("changePasswordForm") UserDTO userDTO) {
         userDTO = userService.getUserByEmail(userDTO.getEmail());
         if (Objects.isNull(userDTO)) {
-            return "Ошибка!"; // TODO: доделать
+            return "Ошибка!";
         } else {
             userService.sendChangePasswordEmail(userDTO);
             return "redirect:/login";
