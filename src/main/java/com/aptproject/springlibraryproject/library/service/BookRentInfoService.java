@@ -60,6 +60,5 @@ public class BookRentInfoService
         bookService.update(bookDTO);
     }
 
-
 }
 
