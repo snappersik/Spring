@@ -4,22 +4,21 @@ import java.util.List;
 
 public interface SecurityConstants {
     List<String> RESOURCES_WHITE_LIST = List.of(
-            "/resources/**",
-            "/static/**",
-            "/js/**",
-            "/css/**",
-            "/images/**",
-            "/",
-            "/carousel/**",
+            "/resources/",
+            "/static/",
+            "/js/",
+            "/css/",
+            "/images/",
+            "/carousel/",
             "/error",
-            "/swagger-ui/**",
-            "/webjars/bootstrap/5.3.3/**",
+            "/",
+            "/swagger-ui/",
+            "/webjars/bootstrap/5.3.3/",
             "/v3/api-docs/**");
 
     List<String> BOOKS_WHITE_LIST = List.of(
             "/books",
             "/books/search",
-            "/books/{id}",
             "/books/{id}");
 
     List<String> AUTHORS_WHITE_LIST = List.of(
@@ -49,7 +48,9 @@ public interface SecurityConstants {
             "/rent/user-books/**"
     );
 
-    List<String> USER_PERMISSIONS_LIST = List.of("/rent/book/*");
+    List<String> USERS_PERMISSIONS_LIST = List.of(
+            "/rent/book/*",
+            "/rent/user-books/*");
     List<String> USERS_REST_WHITE_LIST = List.of("/users/auth");
 
 }

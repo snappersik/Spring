@@ -40,7 +40,7 @@ public class WebSecurityConfig {
                         .requestMatchers(AUTHORS_WHITE_LIST.toArray(String[]::new)).permitAll()
                         .requestMatchers(AUTHORS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
                         .requestMatchers(BOOKS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, LIBRARIAN)
-                        .requestMatchers(USER_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, USER, LIBRARIAN)
+                        .requestMatchers(USERS_PERMISSIONS_LIST.toArray(String[]::new)).hasAnyRole(ADMIN, USER, LIBRARIAN)
                         .anyRequest().authenticated() // Все прочие запросы доступны аутентифицированным пользователям
                 )
                 // Настраиваем вход в систему

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/rent/info")
+@RequestMapping("/api/rest/rent/info")
 @Tag(name = "Аренда книг",
         description = "Контроллер для работы с арендой/выдачей книг пользователем библиотеки")
 public class RentBookController

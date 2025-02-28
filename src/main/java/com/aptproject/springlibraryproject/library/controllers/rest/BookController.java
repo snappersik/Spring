@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/api/rest/books")
 @Tag(name = "Книги",
         description = "Контроллер для работы с книгами библиотеки")
 public class BookController
